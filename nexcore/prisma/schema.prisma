@@ -1,0 +1,66 @@
+// ─── Prisma Schema — nexcore core models ─────────────────────────────────────
+//
+// This schema defines the kernel-level models: User and RefreshToken.
+// Feature modules will ADD their own models to this file when integrated.
+// Never remove or modify the core models without updating the auth system.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+// ─── Core Models ──────────────────────────────────────────────────────────────
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  role          UserRole       @default(USER)
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+/// Stores hashed refresh tokens for JWT rotation.
+/// A user may have multiple active refresh tokens (multiple devices).
+model RefreshToken {
+  id         String    @id @default(cuid())
+  /// bcrypt hash of the actual token — never store raw tokens
+  tokenHash  String    @unique
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// ─── Module Models (add below this line) ─────────────────────────────────────
+//
+// When adding a new module, add its models below this comment.
+// Each model should include a @map() for the table name using snake_case.
+// Example:
+//
+// model Product {
+//   id        String   @id @default(cuid())
+//   name      String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   @@map("products")
+// }

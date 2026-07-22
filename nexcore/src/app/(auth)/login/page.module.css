@@ -1,0 +1,143 @@
+/* ─── Page Layout ────────────────────────────────────────────────────────────── */
+
+.page {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% -10%,
+      hsl(220 90% 60% / 0.12) 0%,
+      transparent 70%
+    ),
+    var(--color-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── Decorative Background ──────────────────────────────────────────────────── */
+
+.backgroundBlob {
+  position: fixed;
+  width: min(600px, 100vw);
+  height: min(600px, 100vw);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    hsl(220 90% 60% / 0.08) 0%,
+    transparent 70%
+  );
+  top: -20%;
+  left: -10%;
+  pointer-events: none;
+  animation: blobFloat 12s ease-in-out infinite alternate;
+}
+
+.backgroundBlob2 {
+  position: fixed;
+  width: min(400px, 80vw);
+  height: min(400px, 80vw);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    hsl(260 80% 65% / 0.06) 0%,
+    transparent 70%
+  );
+  bottom: -10%;
+  right: -5%;
+  pointer-events: none;
+  animation: blobFloat 16s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes blobFloat {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, 20px) scale(1.05); }
+}
+
+/* ─── Card ───────────────────────────────────────────────────────────────────── */
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  animation: fadeInScale var(--transition-slow) ease both;
+  position: relative;
+  z-index: var(--z-overlay);
+
+  /* Subtle inner glow */
+  background-image: linear-gradient(
+    135deg,
+    hsl(220 100% 99%) 0%,
+    hsl(0 0% 100%) 100%
+  );
+}
+
+@media (prefers-color-scheme: dark) {
+  .card {
+    background-image: linear-gradient(
+      135deg,
+      hsl(220 15% 17%) 0%,
+      hsl(220 13% 16%) 100%
+    );
+  }
+}
+
+/* ─── Brand ──────────────────────────────────────────────────────────────────── */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logoMark {
+  color: var(--color-primary-600);
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 8px hsl(220 90% 60% / 0.3));
+}
+
+.logoText {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.025em;
+  line-height: var(--leading-tight);
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-normal);
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────────── */
+
+@media (min-width: 640px) {
+  .card {
+    padding: var(--space-10);
+  }
+}
