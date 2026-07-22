@@ -76,6 +76,21 @@ PORT=8080
 
 fs.writeFileSync(path.join(targetDir, '.env'), envContent);
 
+// Also generate application-local.yml (which is ignored by .gitignore)
+const localYmlPath = path.join(targetDir, 'src', 'main', 'resources', 'application-local.yml');
+const localYmlContent = `# Local Development Overrides (Ignored by git)
+spring:
+  datasource:
+    url: ${defaultDbUrl}
+    username: postgres
+    password: postgres
+
+app:
+  security:
+    jwt-secret: ${randomSecret}
+`;
+fs.writeFileSync(localYmlPath, localYmlContent);
+
 console.log('\n🎉 \x1b[32mSuccess!\x1b[0m javacore template bootstrapped for \x1b[36m' + appName + '\x1b[0m!');
 console.log('\n🗄️  \x1b[33mDatabase & Environment Setup:\x1b[0m');
 console.log(`   - JDBC DB URL set in .env: \x1b[34m${defaultDbUrl}\x1b[0m`);

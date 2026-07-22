@@ -3,4 +3,11 @@ dist/
 .next/
 *.log
 .env
-.env.local
+.env.*
+*.env
+application-*.yml
+application-*.properties
+application-local.yml
+application-dev.yml
+application-prod.yml
+target/

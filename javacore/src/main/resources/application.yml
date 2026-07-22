@@ -2,7 +2,7 @@ spring:
   application:
     name: javacore
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/javacore_db}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/javacore}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
@@ -21,7 +21,7 @@ spring:
 
 app:
   security:
-    jwt-secret: ${SESSION_SECRET:super-secret-jwt-key-minimum-32-characters-long-for-security}
+    jwt-secret: ${SESSION_SECRET:CHANGEME_SET_SESSION_SECRET_ENV_OR_LOCAL_PROFILE_MIN_32_CHARS}
     jwt-expiration-ms: 86400000 # 24 hours
     refresh-token-expiration-ms: 604800000 # 7 days
 

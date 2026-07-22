@@ -26,6 +26,13 @@ target/
 /nbdist/
 /.nb-gradle/
 
-### Logs & Env ###
+### Logs, Env & Secrets ###
 *.log
 .env
+.env.*
+*.env
+application-*.yml
+application-*.properties
+application-local.yml
+application-dev.yml
+application-prod.yml
