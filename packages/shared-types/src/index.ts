@@ -13,6 +13,7 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 export interface ICurrentUser {
   id: string;
   email: string;
+  name?: string;
   role: UserRole;
 }
 
@@ -20,6 +21,7 @@ export interface ICurrentUser {
 export interface IPublicUser {
   id: string;
   email: string;
+  name?: string;
   role: UserRole;
 }
 

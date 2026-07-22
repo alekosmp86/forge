@@ -52,6 +52,16 @@
 - [x] Global exception handling (`AppException` & `GlobalExceptionHandler`)
 - [x] `scripts/create-javacore.js` — 1-command CLI bootstrapping tool (`npm run create-javacore <target-directory>`) with auto-generated database URL and random JWT secrets.
 
+**Phase 5 — vitacore (React + Vite + TypeScript template) (COMPLETE)**
+- [x] Vite 6 + React 19 + TypeScript standalone frontend template (`vitacore/`)
+- [x] Vite dev server proxy configured (`/api` -> `http://localhost:8080` for Spring Boot backend integration)
+- [x] `@forge/shared-types` integration (`ICurrentUser`, `ApiResponse`, etc.)
+- [x] Typed API fetch client (`apiFetch`) with Bearer token injection
+- [x] `AuthProvider` & `useAuth` hook managing authentication state
+- [x] Atomic UI primitives (`Button`, `Input`, `FormField`, `Badge`, `Card`) & CSS Modules styling
+- [x] `LoginForm` component with glassmorphism UI & responsive viewport design
+- [x] `scripts/create-vitacore.js` — 1-command CLI bootstrapping tool (`npm run create-vitacore <target-directory>`)
+
 ---
 
 ## Key Decisions Made

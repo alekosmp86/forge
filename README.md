@@ -21,9 +21,11 @@ forge/
 │   └── src/components/ui/   # Atomic UI component library
 ├── javacore/                # Spring Boot 3 + Hibernate + Spring Security template
 │   └── src/main/java/com/forge/javacore/core/  # Java Kernel (Auth, JPA, Error, User)
+├── vitacore/                # React + Vite + TypeScript frontend template
+│   └── src/                 # SPA components, AuthContext & API client
 ├── packages/
 │   └── shared-types/        # @forge/shared-types npm package (DTOs, API responses)
-├── scripts/                 # CLI scaffolding scripts (create-nexcore, create-javacore)
+├── scripts/                 # CLI scaffolding scripts (create-nexcore, create-javacore, create-vitacore)
 ├── docs/                    # Architecture, Progress, and Module integration guides
 └── AGENTS.md                # Development standards and architectural invariants
 ```
@@ -45,6 +47,13 @@ An enterprise-grade Java 21 foundation built with:
 - **Database & ORM**: PostgreSQL + Spring Data JPA / Hibernate (with UUID primary keys).
 - **Migrations**: Flyway SQL schema migrations (`src/main/resources/db/migration/`).
 - **Authentication**: Stateless Spring Security 6 with JJWT bearer token validation.
+
+### 3. `vitacore` (React + Vite SPA Template)
+A high-performance React 19 single-page application foundation built with:
+- **Build Tool & Framework**: Vite 6 + React 19 + TypeScript.
+- **Data Fetching & State**: TanStack React Query + React Context Auth provider.
+- **API Integration**: Dev proxy configured to target REST backends (such as `javacore` on `http://localhost:8080`).
+- **Styling**: CSS Modules + Forge CSS Custom Properties tokens.
 - **UI Library**: Atomic components (`Button`, `Input`, `FormField`, `Badge`, `Spinner`, `Card`).
 - **Code Quality**: Built-in `react-doctor` compliance auditing.
 
@@ -92,6 +101,11 @@ npm run create-nexcore ../my-next-app
 To bootstrap a new Spring Boot 3 microservice based on `javacore`:
 ```bash
 npm run create-javacore ../my-java-service
+```
+
+To bootstrap a new React + Vite SPA based on `vitacore`:
+```bash
+npm run create-vitacore ../my-vite-app
 ```
 
 This single command copies the template, configures project metadata, auto-generates a local `.env` with a dedicated PostgreSQL database URL and JWT session secret, installs dependencies, and prepares database clients.

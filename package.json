@@ -4,10 +4,12 @@
   "private": true,
   "workspaces": [
     "nexcore",
+    "vitacore",
     "packages/*"
   ],
   "scripts": {
     "create-nexcore": "node scripts/create-nexcore.js",
-    "create-javacore": "node scripts/create-javacore.js"
+    "create-javacore": "node scripts/create-javacore.js",
+    "create-vitacore": "node scripts/create-vitacore.js"
   }
 }
