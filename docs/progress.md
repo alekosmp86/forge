@@ -5,13 +5,13 @@
 ### What Was Built
 
 **Phase 1 — Documentation & Standards (COMPLETE)**
-- [x] `d:\Projects\AGENTS.md` — Updated with full architecture rules, SOLID principles, auth patterns, CSS standards, DB patterns, and documentation requirements.
-- [x] `d:\Projects\forge\docs\architecture.md` — Full architecture reference including design system tokens, auth flow, and stack decisions.
-- [x] `d:\Projects\forge\docs\module-guide.md` — Step-by-step guide for adding a new module to nexcore (with code examples).
-- [x] `d:\Projects\forge\docs\progress.md` — This file.
+- [x] `AGENTS.md` — Updated with full architecture rules, SOLID principles, auth patterns, CSS standards, DB patterns, and documentation requirements.
+- [x] `docs\architecture.md` — Full architecture reference including design system tokens, auth flow, and stack decisions.
+- [x] `docs\module-guide.md` — Step-by-step guide for adding a new module to nexcore (with code examples).
+- [x] `docs\progress.md` — This file.
 
 **Phase 2 — shared-types package (COMPLETE)**
-- [x] `d:\Projects\forge\packages\shared-types\` — npm package `@forge/shared-types` with core DTOs: `ICurrentUser`, `ITokenPayload`, `ITokenPair`, `UserRole`, `ApiResponse<T>`, `PaginatedResponse<T>`.
+- [x] `packages\shared-types\` — npm package `@forge/shared-types` with core DTOs: `ICurrentUser`, `ITokenPayload`, `ITokenPair`, `UserRole`, `ApiResponse<T>`, `PaginatedResponse<T>`.
 
 **Phase 3 — nexcore (Next.js 15 template) (COMPLETE)**
 - [x] Next.js 15 project initialized (App Router, TypeScript, CSS Modules, ESLint)
@@ -48,7 +48,7 @@
 
 | Decision | Choice | Reason |
 |---|---|---|
-| Template folders | Single `d:\Projects\forge\` parent | Easier browsing |
+| Template folders | Single `forge\` parent | Easier browsing |
 | Naming | `nexcore` / `javacore` | Kernel-style naming |
 | Java build | Maven | Standard, explicit |
 | CSS approach | CSS Modules + CSS Custom Properties | No framework lock-in, full power |
