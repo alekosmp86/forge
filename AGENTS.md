@@ -123,6 +123,7 @@ For every domain service in `core/` or in a module:
 # Documentation Requirements
 
 - **Update `docs\progress.md` at the end of every session.** Record what was built, what was left incomplete, and what the next agent should tackle.
+- **Update `README.md` on major architectural changes.** Whenever a major architectural change or new template repository is added (such as scaffolding `javacore`), update the root `README.md` to reflect the updated workspace structure, setup instructions, and feature matrix.
 - **Every repo must have `.agents/AGENTS.md`** with repo-specific context and instructions.
 - **Every new module must be documented in `docs/module-guide.md`** before implementation begins.
 - **Use section dividers (`---`) and clear headings** in all documentation files.
