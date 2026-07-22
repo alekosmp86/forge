@@ -27,6 +27,27 @@ Use this workflow to create a completely new, independent project repository bas
 ### Step 1: Copy Template Files
 Copy the `nexcore` directory into your new project folder:
 
+### ⚡ 1-Command Automated Bootstrapping (Recommended)
+
+From the `forge` workspace root, run:
+
+```bash
+npm run create-nexcore ../my-new-app
+```
+
+This single command automatically:
+1. Copies `nexcore` template files to `../my-new-app`.
+2. Copies `@forge/shared-types` into `../my-new-app/packages/shared-types`.
+3. Configures `package.json` workspace linkage and `tsconfig.json` path mappings.
+4. **Auto-Generates Environment & DB URL**: Creates a tailored `.env` file with a dedicated local PostgreSQL database URL (`postgresql://postgres:postgres@localhost:5432/my_new_app?schema=public`) and a random 64-char `SESSION_SECRET`.
+5. Installs all npm dependencies, compiles `@forge/shared-types`, and generates the Prisma client.
+
+---
+
+### Manual Bootstrapping Steps
+
+If you prefer manual copying:
+
 ```bash
 # Create a new project directory
 mkdir my-app

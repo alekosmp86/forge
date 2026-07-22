@@ -75,7 +75,19 @@ graph TD
 - Node.js 20+
 - PostgreSQL database instance
 
-### Installation & Setup
+### 🚀 Bootstrapping a New Project
+
+To create a new, independent project based on `nexcore`:
+
+```bash
+npm run create-nexcore ../my-new-app
+```
+
+This single command copies the template, links `@forge/shared-types`, auto-generates a local `.env` with a dedicated PostgreSQL database URL and JWT session secret, installs dependencies, and compiles Prisma clients.
+
+---
+
+### Monorepo Setup & Local Development
 
 1. **Clone the repository**:
    ```bash

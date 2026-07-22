@@ -5,5 +5,8 @@
   "workspaces": [
     "nexcore",
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "create-nexcore": "node scripts/create-nexcore.js"
+  }
 }
