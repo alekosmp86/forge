@@ -9,6 +9,7 @@
 - [x] `docs\architecture.md` — Full architecture reference including design system tokens, auth flow, and stack decisions.
 - [x] `docs\module-guide.md` — Step-by-step guide for adding a new module to nexcore (with code examples).
 - [x] `docs\progress.md` — This file.
+- [x] GitHub Repository — Linked to `https://github.com/alekosmp86/forge` and pushed monorepo tree.
 
 **Phase 2 — shared-types package (COMPLETE)**
 - [x] `packages\shared-types\` — npm package `@forge/shared-types` with core DTOs: `ICurrentUser`, `ITokenPayload`, `ITokenPair`, `UserRole`, `ApiResponse<T>`, `PaginatedResponse<T>`.
