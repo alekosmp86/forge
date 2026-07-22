@@ -19,8 +19,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@forge/shared-types": ["../packages/shared-types/src"]
+      "@/*": ["./src/*"]
     }
   },
   "include": [
