@@ -19,12 +19,12 @@ forge/
 │   ├── src/core/            # Stable kernel (Auth, DB client, Error handling, Schemas)
 │   ├── src/app/             # Next.js 15 App Router & API routes
 │   └── src/components/ui/   # Atomic UI component library
+├── javacore/                # Spring Boot 3 + Hibernate + Spring Security template
+│   └── src/main/java/com/forge/javacore/core/  # Java Kernel (Auth, JPA, Error, User)
 ├── packages/
 │   └── shared-types/        # @forge/shared-types npm package (DTOs, API responses)
+├── scripts/                 # CLI scaffolding scripts (create-nexcore, create-javacore)
 ├── docs/                    # Architecture, Progress, and Module integration guides
-│   ├── architecture.md      # Full architecture specification
-│   ├── module-guide.md      # Step-by-step guide for adding self-contained modules
-│   └── progress.md          # Session progress and task logs
 └── AGENTS.md                # Development standards and architectural invariants
 ```
 
@@ -36,8 +36,15 @@ forge/
 A feature-packed Next.js 15 App Router foundation built with:
 - **Framework**: Next.js 15 + React 19 + TypeScript.
 - **Database & ORM**: PostgreSQL via Prisma 7 (using `@prisma/adapter-pg` pool connection).
-- **Authentication**: JWT session tokens signed with `jose` stored in `httpOnly` cookies, protected via `src/proxy.ts` (Next.js proxy route handler).
-- **Styling**: Modern CSS Modules with root-level CSS Custom Properties design system tokens (dark/light themes, dynamic animations). Zero utility framework overhead.
+- **Authentication**: JWT session tokens signed with `jose` stored in `httpOnly` cookies, protected via `src/proxy.ts`.
+- **Styling**: Modern CSS Modules with root-level CSS Custom Properties design system tokens. Zero utility framework overhead.
+
+### 2. `javacore` (Spring Boot 3 Template)
+An enterprise-grade Java 21 foundation built with:
+- **Framework**: Spring Boot 3.4.2 + Maven (`pom.xml`).
+- **Database & ORM**: PostgreSQL + Spring Data JPA / Hibernate (with UUID primary keys).
+- **Migrations**: Flyway SQL schema migrations (`src/main/resources/db/migration/`).
+- **Authentication**: Stateless Spring Security 6 with JJWT bearer token validation.
 - **UI Library**: Atomic components (`Button`, `Input`, `FormField`, `Badge`, `Spinner`, `Card`).
 - **Code Quality**: Built-in `react-doctor` compliance auditing.
 
@@ -75,15 +82,19 @@ graph TD
 - Node.js 20+
 - PostgreSQL database instance
 
-### 🚀 Bootstrapping a New Project
+### 🚀 Bootstrapping New Projects
 
-To create a new, independent project based on `nexcore`:
-
+To bootstrap a new Next.js application based on `nexcore`:
 ```bash
-npm run create-nexcore ../my-new-app
+npm run create-nexcore ../my-next-app
 ```
 
-This single command copies the template, links `@forge/shared-types`, auto-generates a local `.env` with a dedicated PostgreSQL database URL and JWT session secret, installs dependencies, and compiles Prisma clients.
+To bootstrap a new Spring Boot 3 microservice based on `javacore`:
+```bash
+npm run create-javacore ../my-java-service
+```
+
+This single command copies the template, configures project metadata, auto-generates a local `.env` with a dedicated PostgreSQL database URL and JWT session secret, installs dependencies, and prepares database clients.
 
 ---
 

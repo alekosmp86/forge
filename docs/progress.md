@@ -42,8 +42,15 @@
 - [x] `scripts/create-nexcore.js` — 1-command CLI bootstrapping tool (`npm run create-nexcore <target-directory>`) with auto-generated database URL and random JWT secrets.
 - [x] Git initialized with initial commit
 
-**Phase 4 — javacore scaffold**
-- [ ] **NOT STARTED.** To be built in a future session.
+**Phase 4 — javacore scaffold (COMPLETE)**
+- [x] Maven project structure (`pom.xml`, Java 21, Spring Boot 3.4.2)
+- [x] Flyway V1 SQL schema migration (`V1__init_schema.sql` for PostgreSQL)
+- [x] JPA Entities (`User`, `UserRole`, `RefreshToken`, `BaseEntity` with UUID keys)
+- [x] Spring Security 6 stateless JWT architecture (`JwtAuthenticationFilter`, `JwtTokenProvider`, `UserPrincipal`, `SecurityConfig`)
+- [x] SOLID Service pattern (`IUserService` & `UserService`)
+- [x] REST API Controllers (`AuthController` & `UserController` with `@Valid` input validation)
+- [x] Global exception handling (`AppException` & `GlobalExceptionHandler`)
+- [x] `scripts/create-javacore.js` — 1-command CLI bootstrapping tool (`npm run create-javacore <target-directory>`) with auto-generated database URL and random JWT secrets.
 
 ---
 
