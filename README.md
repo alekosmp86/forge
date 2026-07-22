@@ -117,6 +117,7 @@ graph TD
 ## 📄 Documentation
 
 - [Architecture Reference](docs/architecture.md)
+- [Deployment & Bootstrapping Guide](docs/deployment-guide.md)
 - [Module Creation Guide](docs/module-guide.md)
 - [Progress Log](docs/progress.md)
 - [Development Rules](AGENTS.md)

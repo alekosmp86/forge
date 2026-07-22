@@ -8,6 +8,7 @@
 - [x] `AGENTS.md` — Updated with full architecture rules, SOLID principles, auth patterns, CSS standards, DB patterns, and documentation requirements.
 - [x] `docs\architecture.md` — Full architecture reference including design system tokens, auth flow, and stack decisions.
 - [x] `docs\module-guide.md` — Step-by-step guide for adding a new module to nexcore (with code examples).
+- [x] `docs\deployment-guide.md` — Complete Vercel deployment and project bootstrapping guide.
 - [x] `docs\progress.md` — This file.
 - [x] GitHub Repository — Linked to `https://github.com/alekosmp86/forge` and pushed monorepo tree.
 
