@@ -5,15 +5,10 @@ export function useCurrentUser() {
   return useQuery<ICurrentUser>({
     queryKey: ['currentUser'],
     queryFn: async () => {
-      const token = localStorage.getItem('forge_auth_token');
-      const headers: HeadersInit = {
-        'Content-Type': 'application/json',
-      };
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-
-      const response = await fetch('/api/auth/me', { headers });
+      const response = await fetch('/api/auth/me', {
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
       if (!response.ok) {
         throw new Error('Failed to fetch user session');
       }

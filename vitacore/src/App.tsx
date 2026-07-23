@@ -6,17 +6,16 @@ import { ButtonVariant, ButtonSize } from './components/ui/Button/types';
 import { LogOut, ShieldCheck, User } from 'lucide-react';
 import './globals.css';
 
+async function handleLogout() {
+  try {
+    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+  } finally {
+    window.location.reload();
+  }
+}
+
 function MainContent() {
   const { data: currentUser, isLoading } = useCurrentUser();
-
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' });
-    } finally {
-      localStorage.removeItem('forge_auth_token');
-      window.location.reload();
-    }
-  };
 
   if (isLoading) {
     return (

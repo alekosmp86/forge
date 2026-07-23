@@ -28,18 +28,22 @@ export function LoginForm() {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(credentials),
       });
 
-      const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || 'Login failed. Please try again.');
+        let errorMessage = 'Login failed. Please try again.';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorData.message || errorMessage;
+        } catch {
+          // Fallback message when JSON parse fails
+        }
+        throw new Error(errorMessage);
       }
 
-      if (data.token) {
-        localStorage.setItem('forge_auth_token', data.token);
-      }
-      return data;
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
