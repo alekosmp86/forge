@@ -56,11 +56,10 @@
 - [x] Vite 6 + React 19 + TypeScript standalone frontend template (`vitacore/`)
 - [x] Vite dev server proxy configured (`/api` -> `http://localhost:8080` for Spring Boot backend integration)
 - [x] `@forge/shared-types` integration (`ICurrentUser`, `ApiResponse`, etc.)
-- [x] Typed API fetch client (`apiFetch`) with Bearer token injection
-- [x] `AuthProvider` & `useAuth` hook managing authentication state
-- [x] Atomic UI primitives (`Button`, `Input`, `FormField`, `Badge`, `Card`) & CSS Modules styling
-- [x] `LoginForm` component with glassmorphism UI & responsive viewport design
+- [x] 1:1 Alignment with `nexcore`: UI primitives (`Button`, `Input`, `FormField`), design custom properties, and `LoginForm` layout
+- [x] TanStack React Query architecture (`QueryProvider`, `useCurrentUser`, `useMutation`)
 - [x] `scripts/create-vitacore.js` — 1-command CLI bootstrapping tool (`npm run create-vitacore <target-directory>`)
+- [x] React Doctor Audit — Achieved **100/100 Great** score (`npx react-doctor@latest --verbose`), resolving function hoisting, `fetch` status checks, and web storage auth token security rules.
 
 ---
 
@@ -69,26 +68,26 @@
 | Decision | Choice | Reason |
 |---|---|---|
 | Template folders | Single `forge\` parent | Easier browsing |
-| Naming | `nexcore` / `javacore` | Kernel-style naming |
+| Naming | `nexcore` / `javacore` / `vitacore` | Kernel-style naming |
 | Java build | Maven | Standard, explicit |
 | CSS approach | CSS Modules + CSS Custom Properties | No framework lock-in, full power |
-| Auth pattern | Signed JWT in httpOnly cookie (`session.ts` + `proxy.ts`) | olimpo-proven pattern |
-| Shared types | `@forge/shared-types` npm package via `npm link` | Proper decoupling, learn npm link |
-| UI primitives | Included in initial template | Saves time on every project |
-| Modules | Not implemented — only documented | User decides which modules to add |
+| Auth pattern | Signed JWT in httpOnly cookie | olimpo-proven pattern, XSS safe |
+| Shared types | `@forge/shared-types` npm package via `npm link` | Proper decoupling, monorepo workspace |
+| UI primitives | 1:1 shared design across nexcore & vitacore | Consistent UI/UX across Next.js and Vite |
+| React Doctor | Integrated script (`npm run doctor`) & 100% compliant | High code quality and performance invariants |
 
 ---
 
 ## Next Session: Where to Pick Up
 
 **Immediate priorities:**
-1. Test the nexcore login page end-to-end (needs a running PostgreSQL instance)
-2. Scaffold `javacore` (Spring Boot 3 + Hibernate + Security)
-3. Consider adding a `users-management` module to nexcore as a reference example
+1. End-to-end integration testing: run `javacore` Spring Boot REST backend on port 8080 and test `vitacore` Vite SPA frontend against it.
+2. End-to-end integration testing: run `nexcore` Next.js 15 App Router against a local PostgreSQL database.
+3. Scaffold first domain module (e.g. `users-management` or `products`) in `nexcore` and `javacore` following `docs/module-guide.md`.
 
 **Open decisions:**
-- Should `javacore` also have a `shared-types` integration (e.g., generate TypeScript from Java DTOs via OpenAPI)?
-- When to add the OAuth module?
+- When to add OpenAPI / Swagger specification generation to `javacore`?
+- When to implement the OAuth / Social Login module?
 
 ---
 
