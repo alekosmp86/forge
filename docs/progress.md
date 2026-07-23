@@ -66,6 +66,8 @@
 - [x] 1:1 Alignment with `nexcore`: UI primitives (`Button`, `Input`, `FormField`), design custom properties, and `LoginForm` layout
 - [x] TanStack React Query architecture (`QueryProvider`, `useCurrentUser`, `useMutation`)
 - [x] `scripts/create-vitacore.js` — 1-command CLI bootstrapping tool (`npm run create-vitacore <target-directory>`)
+- [x] 1:1 Post-Login Dashboard Parity — Refactored `vitacore` dashboard to match `nexcore` layout, headers, cards, and status check icons 1:1 with CSS Modules.
+- [x] AGENTS.md Standards — Added `vitacore + javacore = nexcore` Frontend Equivalence Invariant and `No barrel export for single components` rule.
 - [x] React Doctor Audit — Achieved **100/100 Great** score (`npx react-doctor@latest --verbose`), resolving function hoisting, `fetch` status checks, and web storage auth token security rules.
 
 ---

@@ -1,18 +1,19 @@
-import { validateSession } from '@/core';
-import { LogoutButton } from '@/components/ui';
 import { CheckCircle2 } from 'lucide-react';
-import { UserProfile } from './components/UserProfile';
-import styles from './page.module.css';
+import type { ICurrentUser } from '@forge/shared-types';
+import { LogoutButton } from '../../components/ui/LogoutButton/LogoutButton';
+import styles from './Dashboard.module.css';
 
-export default async function DashboardPage() {
-  const session = await validateSession();
+interface DashboardProps {
+  currentUser: ICurrentUser;
+}
 
+export function Dashboard({ currentUser }: DashboardProps) {
   return (
     <main className={styles.container}>
       <header className={styles.header}>
         <div className={styles.brand}>
-          <span className={styles.logo}>nexcore</span>
-          <span className={styles.badge}>Kernel Shell</span>
+          <span className={styles.logo}>vitacore</span>
+          <span className={styles.badge}>Vite Kernel</span>
         </div>
 
         <LogoutButton />
@@ -21,7 +22,11 @@ export default async function DashboardPage() {
       <section className={styles.content}>
         <div className={styles.card}>
           <h1 className={styles.welcome}>Welcome back!</h1>
-          <UserProfile />
+          
+          <p className={styles.subtitle}>
+            Signed in as <strong>{currentUser.email}</strong> with role{' '}
+            <code className={styles.role}>{currentUser.role}</code>.
+          </p>
 
           <div className={styles.infoBox}>
             <h2>System Status</h2>
@@ -32,15 +37,15 @@ export default async function DashboardPage() {
               </li>
               <li className={styles.statusItem}>
                 <CheckCircle2 size={16} className={styles.statusIcon} />
-                <span>Session Cookie: Encrypted JWT (jose)</span>
+                <span>Session Cookie: Encrypted JWT</span>
               </li>
               <li className={styles.statusItem}>
                 <CheckCircle2 size={16} className={styles.statusIcon} />
-                <span>Database: PostgreSQL (Prisma 7 adapter)</span>
+                <span>Backend API: Spring Boot (javacore)</span>
               </li>
               <li className={styles.statusItem}>
                 <CheckCircle2 size={16} className={styles.statusIcon} />
-                <span>Session ID: {session?.jti}</span>
+                <span>User ID: {currentUser.id}</span>
               </li>
             </ul>
           </div>

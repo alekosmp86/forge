@@ -35,9 +35,17 @@ This workspace contains the **Forge** — a set of reusable template repositorie
 
 - **Always use TypeScript.** All code files must use `.ts` or `.tsx` extensions with strict type safety.
 - **Decompose components into the smallest atom possible.** Break UI elements into highly reusable atomic building blocks.
+- **No barrel export for single components.** Do not create `index.ts` files inside individual single-component subdirectories (e.g., avoid `LogoutButton/index.ts` or `Input/index.ts`). Import components directly from their explicit file path (e.g., `./LogoutButton/LogoutButton`).
 - **Run react-doctor.** Ensure `react-doctor` is included in npm scripts/packages and run after implementing major changes to audit security, performance, and Fast Refresh compliance.
 - **Plan before implementing.** Always create a detailed implementation plan and get user approval before making code changes.
 - **Make UI components mobile-first.** Always design and write CSS/Tailwind layouts prioritizing mobile viewports first, scaling up with responsive breakpoints (`md:`, `lg:`).
+
+---
+
+# Frontend Equivalence Invariant: vitacore + javacore = nexcore
+
+- **vitacore + javacore = nexcore:** The only difference across template repositories is backend technology (`javacore` Spring Boot 3 vs `nexcore` Next.js 15 internal backend vs `vitacore` Vite SPA frontend).
+- **1:1 UI/UX Parity:** Both `vitacore` and `nexcore` define their own UI components independently, but every component must be visually and behaviorally identical across both repositories (layout, design tokens, CSS modules, responsive behavior, icons, and interactions).
 
 ---
 
