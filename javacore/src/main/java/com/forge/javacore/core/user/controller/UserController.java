@@ -1,5 +1,6 @@
 package com.forge.javacore.core.user.controller;
 
+import com.forge.javacore.core.dto.ApiResponse;
 import com.forge.javacore.core.user.dto.UserResponse;
 import com.forge.javacore.core.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,12 @@ public class UserController {
     private final IUserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllUsers() {
+        return ResponseEntity.ok(ApiResponse.of(userService.getAllUsers()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable UUID id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    public ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable UUID id) {
+        return ResponseEntity.ok(ApiResponse.of(userService.getUserById(id)));
     }
 }

@@ -1,11 +1,9 @@
 package com.forge.javacore.core.user.service;
 
-import com.forge.javacore.core.auth.JwtTokenProvider;
 import com.forge.javacore.core.error.AppException;
 import com.forge.javacore.core.user.domain.User;
 import com.forge.javacore.core.user.domain.UserRole;
 import com.forge.javacore.core.user.dto.AuthRequest;
-import com.forge.javacore.core.user.dto.AuthResponse;
 import com.forge.javacore.core.user.dto.CreateUserRequest;
 import com.forge.javacore.core.user.dto.UserResponse;
 import com.forge.javacore.core.user.repository.UserRepository;
@@ -24,11 +22,10 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider tokenProvider;
 
     @Override
     @Transactional
-    public AuthResponse login(AuthRequest request) {
+    public UserResponse login(AuthRequest request) {
         User user = userRepository.findByEmail(request.getEmail().toLowerCase())
                 .orElseThrow(() -> AppException.unauthorized("Invalid credentials"));
 
@@ -36,13 +33,15 @@ public class UserService implements IUserService {
             throw AppException.unauthorized("Invalid credentials");
         }
 
-        String token = tokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole().name());
+        return mapToUserResponse(user);
+    }
 
-        return AuthResponse.builder()
-                .success(true)
-                .token(token)
-                .user(mapToUserResponse(user))
-                .build();
+    @Override
+    @Transactional(readOnly = true)
+    public UserResponse getCurrentUser(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> AppException.unauthorized("User not found"));
+        return mapToUserResponse(user);
     }
 
     @Override

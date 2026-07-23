@@ -5,7 +5,12 @@
 ### What Was Built
 
 **Phase 1 — Documentation & Standards (COMPLETE)**
-- [x] `AGENTS.md` — Updated with full architecture rules, SOLID principles, auth patterns, CSS standards, DB patterns, and documentation requirements.
+- [x] `.vscode/tasks.json` & `launch.json` — Configured `JAVA_TOOL_OPTIONS` environment variable for JDWP debug agent (`port 5005`), resolving PowerShell `-D` argument parsing errors and linking VS Code debugger launch to `Forge: Start Debug (javacore)`.
+- [x] `javacore` DB Migration — Added `V2__add_updated_at_to_refresh_tokens.sql` and `V3__seed_test_users.sql` for test account seeding.
+- [x] `nexcore` Prisma Seed — Updated `prisma/seed.ts` to seed both `admin@forge.com` and `user@forge.com`.
+- [x] `javacore` Hot Reloading — Integrated `spring-boot-devtools` for fast in-memory application context restarts upon code changes.
+- [x] `javacore` Strict Shared-Types Alignment — Removed custom `AuthResponse` and updated all endpoints to return strictly `ApiResponse<TData>` matching `@forge/shared-types` 1:1.
+- [x] `vitacore` Configuration — Created `.env` and `.env.example` defining `VITE_BACKEND_URL=http://localhost:8080`, updated `vite.config.ts` to dynamically proxy `/api` via `loadEnv()`, added `src/config/api.ts` and `ImportMetaEnv` types in `src/vite-env.d.ts`.
 - [x] `docs\architecture.md` — Full architecture reference including design system tokens, auth flow, and stack decisions.
 - [x] `docs\module-guide.md` — Step-by-step guide for adding a new module to nexcore (with code examples).
 - [x] `docs\deployment-guide.md` — Complete Vercel deployment and project bootstrapping guide.
@@ -50,6 +55,8 @@
 - [x] SOLID Service pattern (`IUserService` & `UserService`)
 - [x] REST API Controllers (`AuthController` & `UserController` with `@Valid` input validation)
 - [x] Global exception handling (`AppException` & `GlobalExceptionHandler`)
+- [x] Domain-Agnostic Response DTO — Relocated `ApiResponse<T>` from `core.user.dto` to kernel `com.forge.javacore.core.dto` package, decoupling HTTP response wrappers from the user domain.
+- [x] Configuration Security — Untracked `application.yml` from Git repository and added to `.gitignore`. Created `application.yml.example` template.
 - [x] `scripts/create-javacore.js` — 1-command CLI bootstrapping tool (`npm run create-javacore <target-directory>`) with auto-generated database URL and random JWT secrets.
 
 **Phase 5 — vitacore (React + Vite + TypeScript template) (COMPLETE)**

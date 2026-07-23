@@ -4,7 +4,7 @@ spring:
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/javacore}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    password: ${DB_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -21,7 +21,7 @@ spring:
 
 app:
   security:
-    jwt-secret: ${SESSION_SECRET:CHANGEME_SET_SESSION_SECRET_ENV_OR_LOCAL_PROFILE_MIN_32_CHARS}
+    jwt-secret: ${SESSION_SECRET:SIA+nobBTEoUxmwcToApHueOgat+EAAjm2/yjR5e0f8=}
     jwt-expiration-ms: 86400000 # 24 hours
     refresh-token-expiration-ms: 604800000 # 7 days
 

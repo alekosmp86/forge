@@ -82,6 +82,13 @@
 
         <!-- Utilities -->
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -100,12 +107,22 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>debug</id>
+            <properties>
+                <spring-boot.run.jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</spring-boot.run.jvmArguments>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <jvmArguments>${spring-boot.run.jvmArguments}</jvmArguments>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
