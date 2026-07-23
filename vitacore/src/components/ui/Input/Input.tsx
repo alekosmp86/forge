@@ -1,15 +1,41 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { forwardRef } from 'react';
 import styles from './Input.module.css';
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  error?: boolean;
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  hasError?: boolean;
 }
 
-export const Input: React.FC<InputProps> = ({ error = false, className = '', ...props }) => {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { leftIcon, rightIcon, hasError, className, ...props },
+  ref
+) {
   return (
-    <input
-      className={`${styles.input} ${error ? styles.error : ''} ${className}`}
-      {...props}
-    />
+    <div className={styles.wrapper}>
+      {leftIcon && (
+        <span className={styles.iconLeft} aria-hidden="true">
+          {leftIcon}
+        </span>
+      )}
+      <input
+        ref={ref}
+        {...props}
+        className={[
+          styles.input,
+          leftIcon ? styles.withLeftIcon : '',
+          rightIcon ? styles.withRightIcon : '',
+          hasError ? styles.hasError : '',
+          className ?? '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      />
+      {rightIcon && (
+        <span className={styles.iconRight} aria-hidden="true">
+          {rightIcon}
+        </span>
+      )}
+    </div>
   );
-};
+});
