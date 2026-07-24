@@ -14,7 +14,12 @@
 - [x] `javacore/src/main/java/com/forge/javacore/core/config/AppProperties.java` — Refactored `AppProperties` as a clean centralized provider referencing domain property classes with `@PostConstruct` startup validation.
 - [x] `javacore/src/main/java/com/forge/javacore/core/auth/JwtTokenProvider.java` — Refactored `JwtTokenProvider` to inject `AppProperties` instead of scattered `@Value` annotations.
 - [x] `javacore/.agents/AGENTS.md` — Created repo-specific agent rules specifying SOLID principles, centralized `AppException` error handling, `AppProperties` injection, and Flyway database invariants.
-- [x] `javacore/README.md` — Documented run, debug, stop, compile, and build options.
+- [x] `scripts/prompt-helper.js` — Built interactive CLI prompt helper (`readline`), PostgreSQL database auto-creation utility (`createdb` / `psql`), and automatic Flyway database migration runner (`tryRunDatabaseMigrations`).
+- [x] `scripts/create-javacore.js` — Enhanced `javacore` setup script with interactive prompt flow for DB host/port/name/credentials, JWT secrets, and server port, automatically generating `.env`, `application.yml`, and `application-local.yml`.
+- [x] `scripts/create-vitacore.js` — Enhanced `vitacore` setup script with interactive prompt flow for backend target URL and dev port, generating `.env` and `.env.local`.
+- [x] `scripts/create-stack.js` — Created master full-stack interactive bootstrapper (`npm run create-stack <target-folder>`) to set up `backend/` (`javacore`) and `frontend/` (`vitacore`) interlinked couples in a single command.
+- [x] `package.json` — Added `"create-stack"` script command.
+- [x] `README.md` — Updated Quick Start documentation for full-stack and single-repo interactive setup.
 
 ---
 

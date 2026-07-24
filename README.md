@@ -93,22 +93,27 @@ graph TD
 
 ### 🚀 Bootstrapping New Projects
 
-To bootstrap a new Next.js application based on `nexcore`:
+To bootstrap a full-stack application (`javacore` Spring Boot 3 backend + `vitacore` React + Vite frontend couple):
 ```bash
-npm run create-nexcore ../my-next-app
+npm run create-stack ../my-fullstack-app
 ```
 
-To bootstrap a new Spring Boot 3 microservice based on `javacore`:
+To bootstrap an individual Spring Boot 3 microservice based on `javacore`:
 ```bash
 npm run create-javacore ../my-java-service
 ```
 
-To bootstrap a new React + Vite SPA based on `vitacore`:
+To bootstrap an individual React + Vite SPA based on `vitacore`:
 ```bash
 npm run create-vitacore ../my-vite-app
 ```
 
-This single command copies the template, configures project metadata, auto-generates a local `.env` with a dedicated PostgreSQL database URL and JWT session secret, installs dependencies, and prepares database clients.
+To bootstrap an individual Next.js 15 application based on `nexcore`:
+```bash
+npm run create-nexcore ../my-next-app
+```
+
+These interactive commands prompt for database credentials, JWT secrets, ports, and backend URLs (with smart defaults), automatically generate `.env`, `application.yml`, and `application-local.yml` files, attempt PostgreSQL database creation, install dependencies, and build shared type packages.
 
 ---
 
