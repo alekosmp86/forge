@@ -1,10 +1,29 @@
 # Forge — Progress Log
 
+## Session: 2026-07-24
+
+### What Was Built
+
+**javacore Run / Stop / Debug Tasks (COMPLETE)**
+
+- [x] `.vscode/tasks.json` — Added shell tasks: `Forge: Run javacore`, `Forge: Run javacore (Debug)`, `Forge: Stop javacore`, `Forge: Compile javacore`, `Forge: Build javacore`.
+- [x] `.vscode/launch.json` — Added VS Code Java debug launch configurations (`Forge: Launch & Debug javacore` as primary/default launch, `Forge: Start & Debug javacore`, and `Forge: Debug javacore (Attach)`).
+- [x] `package.json` — Added root CLI scripts: `javacore:run`, `javacore:debug`, `javacore:stop`, `javacore:compile`, `javacore:build`.
+- [x] `.gitignore` — Unignored `.vscode/tasks.json` and `.vscode/launch.json` so task configurations are tracked and committed to git.
+- [x] `javacore/src/main/java/com/forge/javacore/core/config/SecurityProperties.java` — Extracted security/JWT configuration into standalone `@ConfigurationProperties(prefix = "app.security")` class.
+- [x] `javacore/src/main/java/com/forge/javacore/core/config/AppProperties.java` — Refactored `AppProperties` as a clean centralized provider referencing domain property classes with `@PostConstruct` startup validation.
+- [x] `javacore/src/main/java/com/forge/javacore/core/auth/JwtTokenProvider.java` — Refactored `JwtTokenProvider` to inject `AppProperties` instead of scattered `@Value` annotations.
+- [x] `javacore/.agents/AGENTS.md` — Created repo-specific agent rules specifying SOLID principles, centralized `AppException` error handling, `AppProperties` injection, and Flyway database invariants.
+- [x] `javacore/README.md` — Documented run, debug, stop, compile, and build options.
+
+---
+
 ## Session: 2026-07-22
 
 ### What Was Built
 
 **Phase 1 — Documentation & Standards (COMPLETE)**
+
 - [x] `.vscode/tasks.json` & `launch.json` — Configured `JAVA_TOOL_OPTIONS` environment variable for JDWP debug agent (`port 5005`), resolving PowerShell `-D` argument parsing errors and linking VS Code debugger launch to `Forge: Start Debug (javacore)`.
 - [x] `javacore` DB Migration — Added `V2__add_updated_at_to_refresh_tokens.sql` and `V3__seed_test_users.sql` for test account seeding.
 - [x] `nexcore` Prisma Seed — Updated `prisma/seed.ts` to seed both `admin@forge.com` and `user@forge.com`.
@@ -18,9 +37,11 @@
 - [x] GitHub Repository — Linked to `https://github.com/alekosmp86/forge` and pushed monorepo tree.
 
 **Phase 2 — shared-types package (COMPLETE)**
+
 - [x] `packages\shared-types\` — npm package `@forge/shared-types` with core DTOs: `ICurrentUser`, `ITokenPayload`, `ITokenPair`, `UserRole`, `ApiResponse<T>`, `PaginatedResponse<T>`.
 
 **Phase 3 — nexcore (Next.js 15 template) (COMPLETE)**
+
 - [x] Next.js 15 project initialized (App Router, TypeScript, CSS Modules, ESLint)
 - [x] `src/core/types.ts` — Core contracts
 - [x] `src/core/errors/` — `AppError` base class, HTTP error helpers
@@ -48,6 +69,7 @@
 - [x] Git initialized with initial commit
 
 **Phase 4 — javacore scaffold (COMPLETE)**
+
 - [x] Maven project structure (`pom.xml`, Java 21, Spring Boot 3.4.2)
 - [x] Flyway V1 SQL schema migration (`V1__init_schema.sql` for PostgreSQL)
 - [x] JPA Entities (`User`, `UserRole`, `RefreshToken`, `BaseEntity` with UUID keys)
@@ -60,6 +82,7 @@
 - [x] `scripts/create-javacore.js` — 1-command CLI bootstrapping tool (`npm run create-javacore <target-directory>`) with auto-generated database URL and random JWT secrets.
 
 **Phase 5 — vitacore (React + Vite + TypeScript template) (COMPLETE)**
+
 - [x] Vite 6 + React 19 + TypeScript standalone frontend template (`vitacore/`)
 - [x] Vite dev server proxy configured (`/api` -> `http://localhost:8080` for Spring Boot backend integration)
 - [x] `@forge/shared-types` integration (`ICurrentUser`, `ApiResponse`, etc.)
@@ -74,27 +97,29 @@
 
 ## Key Decisions Made
 
-| Decision | Choice | Reason |
-|---|---|---|
-| Template folders | Single `forge\` parent | Easier browsing |
-| Naming | `nexcore` / `javacore` / `vitacore` | Kernel-style naming |
-| Java build | Maven | Standard, explicit |
-| CSS approach | CSS Modules + CSS Custom Properties | No framework lock-in, full power |
-| Auth pattern | Signed JWT in httpOnly cookie | olimpo-proven pattern, XSS safe |
-| Shared types | `@forge/shared-types` npm package via `npm link` | Proper decoupling, monorepo workspace |
-| UI primitives | 1:1 shared design across nexcore & vitacore | Consistent UI/UX across Next.js and Vite |
-| React Doctor | Integrated script (`npm run doctor`) & 100% compliant | High code quality and performance invariants |
+| Decision         | Choice                                                | Reason                                       |
+| ---------------- | ----------------------------------------------------- | -------------------------------------------- |
+| Template folders | Single `forge\` parent                                | Easier browsing                              |
+| Naming           | `nexcore` / `javacore` / `vitacore`                   | Kernel-style naming                          |
+| Java build       | Maven                                                 | Standard, explicit                           |
+| CSS approach     | CSS Modules + CSS Custom Properties                   | No framework lock-in, full power             |
+| Auth pattern     | Signed JWT in httpOnly cookie                         | olimpo-proven pattern, XSS safe              |
+| Shared types     | `@forge/shared-types` npm package via `npm link`      | Proper decoupling, monorepo workspace        |
+| UI primitives    | 1:1 shared design across nexcore & vitacore           | Consistent UI/UX across Next.js and Vite     |
+| React Doctor     | Integrated script (`npm run doctor`) & 100% compliant | High code quality and performance invariants |
 
 ---
 
 ## Next Session: Where to Pick Up
 
 **Immediate priorities:**
+
 1. End-to-end integration testing: run `javacore` Spring Boot REST backend on port 8080 and test `vitacore` Vite SPA frontend against it.
 2. End-to-end integration testing: run `nexcore` Next.js 15 App Router against a local PostgreSQL database.
 3. Scaffold first domain module (e.g. `users-management` or `products`) in `nexcore` and `javacore` following `docs/module-guide.md`.
 
 **Open decisions:**
+
 - When to add OpenAPI / Swagger specification generation to `javacore`?
 - When to implement the OAuth / Social Login module?
 

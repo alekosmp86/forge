@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Forge: Launch & Debug javacore",
+      "request": "launch",
+      "mainClass": "com.forge.javacore.JavacoreApplication",
+      "projectName": "javacore",
+      "cwd": "${workspaceFolder}/javacore"
+    },
+    {
+      "type": "java",
+      "name": "Forge: Start & Debug javacore",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005,
+      "preLaunchTask": "Forge: Run javacore (Debug)"
+    }
+  ]
+}

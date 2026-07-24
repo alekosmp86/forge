@@ -46,12 +46,47 @@ export SESSION_SECRET="super-secret-jwt-key-minimum-32-characters-long-for-secur
 ```
 
 ### 2. Build & Run
+
+#### Using npm scripts (from workspace root):
+```bash
+# Run application
+npm run javacore:run
+
+# Run in debug mode (JDWP agent on port 5005)
+npm run javacore:debug
+
+# Stop running javacore processes (ports 8080 & 5005)
+npm run javacore:stop
+
+# Compile Java source files
+npm run javacore:compile
+
+# Build package without running tests
+npm run javacore:build
+```
+
+#### Using VS Code Tasks:
+- **`Forge: Run javacore`** — Starts Spring Boot server on port `8080`.
+- **`Forge: Run javacore (Debug)`** — Starts server with JDWP debugging enabled on port `5005`.
+- **`Forge: Stop javacore`** — Kills active `javacore` processes running on ports `8080` / `5005`.
+- **`Forge: Compile javacore`** — Executes `mvn compile`.
+- **`Forge: Build javacore`** — Executes `mvn clean package -DskipTests`.
+
+#### Using VS Code Debugger (`launch.json`):
+- **`Forge: Launch & Debug javacore`** — Directly builds and launches the Spring Boot main class with the VS Code Java Debugger.
+- **`Forge: Start & Debug javacore`** — Starts the debug server via Maven task and attaches to port `5005`.
+- **`Forge: Debug javacore (Attach)`** — Attaches to an already-running debug process on `localhost:5005`.
+
+#### Using Direct Maven Commands:
 ```bash
 # Compile and build JAR package
 mvn clean package
 
 # Run Spring Boot application
 mvn spring-boot:run
+
+# Run with debug profile
+mvn spring-boot:run -Pdebug
 ```
 
 ---

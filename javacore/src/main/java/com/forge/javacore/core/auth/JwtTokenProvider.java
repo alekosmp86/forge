@@ -1,8 +1,8 @@
 package com.forge.javacore.core.auth;
 
+import com.forge.javacore.core.config.AppProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -16,12 +16,10 @@ public class JwtTokenProvider {
     private final SecretKey key;
     private final long jwtExpirationMs;
 
-    public JwtTokenProvider(
-            @Value("${app.security.jwt-secret}") String jwtSecret,
-            @Value("${app.security.jwt-expiration-ms}") long jwtExpirationMs
-    ) {
+    public JwtTokenProvider(AppProperties appProperties) {
+        String jwtSecret = appProperties.getSecurity().getJwtSecret();
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-        this.jwtExpirationMs = jwtExpirationMs;
+        this.jwtExpirationMs = appProperties.getSecurity().getJwtExpirationMs();
     }
 
     public String generateToken(UUID userId, String email, String role) {

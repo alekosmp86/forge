@@ -1,0 +1,93 @@
+{
+  "version": "2.0.0",
+  "options": {
+    "env": {
+      "PATH": "D:\\Tools\\apache-maven-3.9.16-bin\\bin;${env:PATH}"
+    }
+  },
+  "tasks": [
+    {
+      "label": "Forge: Run javacore",
+      "type": "shell",
+      "command": "mvn spring-boot:run",
+      "options": {
+        "cwd": "${workspaceFolder}/javacore"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Forge: Run javacore (Debug)",
+      "type": "shell",
+      "command": "mvn spring-boot:run -Pdebug",
+      "options": {
+        "cwd": "${workspaceFolder}/javacore"
+      },
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Scanning for projects...",
+          "endsPattern": "Listening for transport dt_socket at address: 5005"
+        }
+      }
+    },
+    {
+      "label": "Forge: Stop javacore",
+      "type": "shell",
+      "command": "powershell -Command \"$conn = Get-NetTCPConnection -LocalPort 8080,5005 -ErrorAction SilentlyContinue; if ($conn) { $conn | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Write-Host 'Stopped javacore processes.' } else { Write-Host 'No running javacore processes found.' }\"",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Forge: Build javacore",
+      "type": "shell",
+      "command": "mvn clean package -DskipTests",
+      "options": {
+        "cwd": "${workspaceFolder}/javacore"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Forge: Compile javacore",
+      "type": "shell",
+      "command": "mvn compile",
+      "options": {
+        "cwd": "${workspaceFolder}/javacore"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

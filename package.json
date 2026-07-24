@@ -10,6 +10,11 @@
   "scripts": {
     "create-nexcore": "node scripts/create-nexcore.js",
     "create-javacore": "node scripts/create-javacore.js",
-    "create-vitacore": "node scripts/create-vitacore.js"
+    "create-vitacore": "node scripts/create-vitacore.js",
+    "javacore:run": "cd javacore && mvn spring-boot:run",
+    "javacore:debug": "cd javacore && mvn spring-boot:run -Pdebug",
+    "javacore:stop": "powershell -Command \"$conn = Get-NetTCPConnection -LocalPort 8080,5005 -ErrorAction SilentlyContinue; if ($conn) { $conn | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Write-Host 'Stopped javacore processes.' } else { Write-Host 'No running javacore processes found.' }\"",
+    "javacore:compile": "cd javacore && mvn compile",
+    "javacore:build": "cd javacore && mvn clean package -DskipTests"
   }
 }

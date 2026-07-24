@@ -21,7 +21,7 @@ spring:
 
 app:
   security:
-    jwt-secret: ${SESSION_SECRET:[JWT_SECRET_KEY]}
+    jwt-secret: ${SESSION_SECRET:local-development-secret-key-must-be-at-least-32-bytes-long}
     jwt-expiration-ms: 86400000 # 24 hours
     refresh-token-expiration-ms: 604800000 # 7 days
 
