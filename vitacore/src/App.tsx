@@ -1,4 +1,5 @@
 import { QueryProvider } from './providers/QueryProvider';
+import { ToastProvider } from './components/ui/Toast/ToastProvider';
 import { useCurrentUser } from './hooks/useCurrentUser';
 import { LoginForm } from './features/auth/LoginForm';
 import { Dashboard } from './features/dashboard/Dashboard';
@@ -25,7 +26,9 @@ function MainContent() {
 export function App() {
   return (
     <QueryProvider>
-      <MainContent />
+      <ToastProvider>
+        <MainContent />
+      </ToastProvider>
     </QueryProvider>
   );
 }

@@ -1,21 +1,24 @@
 'use client';
 
 import { useState } from 'react';
-import { AlertTriangle } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Info, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/Button/Button';
 import { ButtonVariant } from '@/components/ui/Button/types';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal/ConfirmationModal';
 import { ModalVariant } from '@/components/ui/ConfirmationModal/types';
+import { useToast } from '@/components/ui/Toast/useToast';
 
 export function DashboardInteractiveDemo() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
+  const toast = useToast();
 
   const handleConfirm = () => {
     setIsActionLoading(true);
     setTimeout(() => {
       setIsActionLoading(false);
       setIsModalOpen(false);
+      toast.success('Workspace deleted successfully!', 'Action Completed');
     }, 1000);
   };
 
@@ -24,15 +27,38 @@ export function DashboardInteractiveDemo() {
       <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
         <h2>UI Components Demo</h2>
         <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginBottom: '1rem' }}>
-          Test cross-stack ConfirmationModal component:
+          Test cross-stack ConfirmationModal and Toaster Notification system:
         </p>
-        <Button
-          variant={ButtonVariant.DANGER}
-          leftIcon={<AlertTriangle size={16} />}
-          onClick={() => setIsModalOpen(true)}
-        >
-          Test Confirmation Modal
-        </Button>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <Button
+            variant={ButtonVariant.DANGER}
+            leftIcon={<AlertTriangle size={16} />}
+            onClick={() => setIsModalOpen(true)}
+          >
+            Test Confirmation Modal
+          </Button>
+          <Button
+            variant={ButtonVariant.PRIMARY}
+            leftIcon={<CheckCircle2 size={16} />}
+            onClick={() => toast.success('Operation completed successfully!', 'Success')}
+          >
+            Success Toast
+          </Button>
+          <Button
+            variant={ButtonVariant.SECONDARY}
+            leftIcon={<AlertCircle size={16} />}
+            onClick={() => toast.warning('Storage reaching capacity limit.', 'Warning')}
+          >
+            Warning Toast
+          </Button>
+          <Button
+            variant={ButtonVariant.GHOST}
+            leftIcon={<Info size={16} />}
+            onClick={() => toast.info('New kernel update available.', 'Information')}
+          >
+            Info Toast
+          </Button>
+        </div>
       </div>
 
       <ConfirmationModal
