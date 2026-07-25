@@ -3,6 +3,7 @@
 - **vitacore + javacore = nexcore:** The only difference across template repositories is backend technology (`javacore` Spring Boot 3 vs `nexcore` Next.js 15 internal backend vs `vitacore` Vite SPA frontend).
 - **1:1 UI/UX & Backend Feature Parity:** Every feature, component, API endpoint, or architectural change implemented in one stack must immediately be replicated across all relevant sibling stacks:
   - **Frontend Components & Modals:** Any new UI component, modal (e.g., confirmation modals), layout update, or design system addition introduced in `vitacore` must be replicated in `nexcore` (and vice-versa) with 1:1 visual, interaction, and behavioral parity.
+  - **React Doctor Audit Fixes:** Any code fix, refactoring, accessibility update, or performance optimization applied as a result of running `react-doctor` in one stack (e.g., `nexcore`) must immediately be replicated to all corresponding component files in sibling stacks (e.g., `vitacore`) to preserve 1:1 cross-stack parity.
   - **Backend Services & API Endpoints:** Any new backend feature, API route/endpoint, service method, or database schema change introduced in `nexcore` internal backend must be replicated in `javacore` Spring Boot backend (and vice-versa).
   - **Shared Contracts & DTOs:** Update `@forge/shared-types` whenever DTOs, request payloads, or response shapes change so all stacks remain in sync.
 

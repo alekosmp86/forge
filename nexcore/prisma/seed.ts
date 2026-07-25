@@ -31,26 +31,28 @@ async function main() {
     },
   ];
 
-  for (const userData of initialUsers) {
-    const user = await prisma.user.upsert({
-      where: { email: userData.email },
-      update: {
-        passwordHash,
-        isActive: true,
-      },
-      create: {
-        email: userData.email,
-        passwordHash,
-        role: userData.role,
-        isActive: true,
-      },
-    });
+  await Promise.all(
+    initialUsers.map(async (userData) => {
+      const user = await prisma.user.upsert({
+        where: { email: userData.email },
+        update: {
+          passwordHash,
+          isActive: true,
+        },
+        create: {
+          email: userData.email,
+          passwordHash,
+          role: userData.role,
+          isActive: true,
+        },
+      });
 
-    console.log(`✓ User seeded successfully:`);
-    console.log(`  Email:    ${user.email}`);
-    console.log(`  Password: ${defaultPassword}`);
-    console.log(`  Role:     ${user.role}`);
-  }
+      console.log(`✓ User seeded successfully:`);
+      console.log(`  Email:    ${user.email}`);
+      console.log(`  Password: ${defaultPassword}`);
+      console.log(`  Role:     ${user.role}`);
+    })
+  );
 
   await prisma.$disconnect();
   await pool.end();

@@ -19,6 +19,13 @@
 - [x] `nexcore/prisma/seed.ts` — Enhanced Prisma seed script to seed both `admin@forge.com` (ADMIN) and `user@forge.com` (USER) matching `javacore` seed data 1:1.
 - [x] `nexcore/package.json` & `package.json` — Added `"db:seed"` script to `nexcore/package.json` (`prisma db seed`) and root `package.json` (`npm run db:seed --workspace=nexcore`).
 
+**React Doctor Audit Fixes & Replication Rule (COMPLETE)**
+
+- [x] `AGENTS.md` & `.agents/AGENTS.md` — Added rule mandating that any code fix, refactoring, accessibility update, or performance optimization resulting from `react-doctor` audits in one stack must immediately be replicated to sibling stacks to preserve 1:1 cross-stack parity.
+- [x] `nexcore/prisma/seed.ts` — Resolved `async-await-in-loop` by replacing sequential `for...of` loop with `Promise.all(initialUsers.map(...))`.
+- [x] `nexcore/src/components/ui/ConfirmationModal/` & `vitacore/src/components/ui/ConfirmationModal/` — Resolved `prefer-html-dialog`, `prefer-use-effect-event`, and `no-noninteractive-element-interactions` by migrating to native HTML `<dialog>` with `showModal()`, `close()`, and attaching native DOM click handlers inside `useEffect` across both stacks. Achieved **100/100 Great** (0 warnings, 0 errors).
+- [x] `vitacore/src/config/api.ts` — Resolved `deslop/unused-file` by connecting `API_CONFIG.endpoints` to `useCurrentUser`, `LoginForm`, and `LogoutButton`, replacing raw endpoint string literals. Achieved **100/100 Great** (0 warnings, 0 errors) in `vitacore`.
+
 ---
 
 ## Session: 2026-07-24

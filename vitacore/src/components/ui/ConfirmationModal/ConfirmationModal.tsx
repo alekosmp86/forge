@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { AlertTriangle, AlertCircle, Info, X } from 'lucide-react';
 import { Button } from '../Button/Button';
 import { ButtonVariant } from '../Button/types';
@@ -16,24 +16,52 @@ export function ConfirmationModal({
   onConfirm,
   onCancel,
 }: ConfirmationModalProps) {
-  useEffect(() => {
-    if (!isOpen) return;
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const onCancelRef = useRef(onCancel);
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && !isLoading) {
-        onCancel();
+  useEffect(() => {
+    onCancelRef.current = onCancel;
+  }, [onCancel]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isOpen) {
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+    } else {
+      if (dialog.open) {
+        dialog.close();
+      }
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const handleBackdropClick = (event: MouseEvent) => {
+      if (event.target === dialog && !isLoading) {
+        onCancelRef.current();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, isLoading, onCancel]);
+    dialog.addEventListener('click', handleBackdropClick);
+    return () => dialog.removeEventListener('click', handleBackdropClick);
+  }, [isLoading]);
 
-  if (!isOpen) return null;
+  const handleCancelClick = () => {
+    if (!isLoading) {
+      onCancelRef.current();
+    }
+  };
 
-  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget && !isLoading) {
-      onCancel();
+  const handleDialogCancel = (event: React.SyntheticEvent<HTMLDialogElement>) => {
+    event.preventDefault();
+    if (!isLoading) {
+      onCancelRef.current();
     }
   };
 
@@ -61,18 +89,14 @@ export function ConfirmationModal({
   };
 
   return (
-    <div
-      className={styles.backdrop}
-      onClick={handleBackdropClick}
-      role="presentation"
+    <dialog
+      ref={dialogRef}
+      className={styles.dialog}
+      onCancel={handleDialogCancel}
+      aria-labelledby="confirmation-modal-title"
+      aria-describedby="confirmation-modal-description"
     >
-      <div
-        className={[styles.modal, styles[`variant-${variant}`]].join(' ')}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="confirmation-modal-title"
-        aria-describedby="confirmation-modal-description"
-      >
+      <div className={[styles.modal, styles[`variant-${variant}`]].join(' ')}>
         <div className={styles.header}>
           <div className={styles.titleContainer}>
             <span className={styles.iconWrapper}>{getVariantIcon()}</span>
@@ -83,7 +107,7 @@ export function ConfirmationModal({
           <button
             type="button"
             className={styles.closeButton}
-            onClick={onCancel}
+            onClick={handleCancelClick}
             disabled={isLoading}
             aria-label="Close modal"
           >
@@ -101,7 +125,7 @@ export function ConfirmationModal({
           <Button
             type="button"
             variant={ButtonVariant.GHOST}
-            onClick={onCancel}
+            onClick={handleCancelClick}
             disabled={isLoading}
           >
             {cancelLabel}
@@ -116,6 +140,6 @@ export function ConfirmationModal({
           </Button>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

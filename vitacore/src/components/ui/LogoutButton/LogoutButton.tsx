@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { LogOut } from 'lucide-react';
 import { Button } from '../Button/Button';
 import { ButtonVariant, ButtonSize } from '../Button/types';
+import { API_CONFIG } from '../../../config/api';
 
 interface LogoutButtonProps {
   variant?: ButtonVariant;
@@ -21,7 +22,7 @@ export function LogoutButton({
   async function handleLogout() {
     setIsLoading(true);
     try {
-      await fetch('/api/auth/logout', {
+      await fetch(API_CONFIG.endpoints.logout, {
         method: 'POST',
         credentials: 'include',
       });

@@ -55,6 +55,7 @@ This workspace contains the **Forge** — a set of reusable template repositorie
 # React Doctor Compliance & Code Quality
 
 - **Run `react-doctor` after major UI or architecture changes:** Execute `npm run doctor` in `nexcore` to audit codebase health, security, and performance.
+- **Replicate React Doctor fixes across stacks:** Any code fix, refactoring, accessibility update, or performance optimization applied as a result of running `react-doctor` in one stack (e.g., `nexcore`) must immediately be replicated to all corresponding component files in sibling stacks (e.g., `vitacore`) to preserve 1:1 cross-stack parity.
 - **Fast Refresh Rules:** Do not export non-component symbols (such as enums, constants, or helper functions) directly from React component files (`.tsx`). Separate types and constants into a `types.ts` or `constants.ts` file within the component directory so Fast Refresh can preserve state cleanly.
 - **Dependency & Code Slop Prevention:** Maintain zero unused dependencies in `package.json` and keep entry-point reachability clean.
 

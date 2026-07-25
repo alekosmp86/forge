@@ -4,6 +4,7 @@ import { Mail, Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { Button } from '../../components/ui/Button/Button';
 import { Input } from '../../components/ui/Input/Input';
 import { FormField } from '../../components/ui/FormField/FormField';
+import { API_CONFIG } from '../../config/api';
 import styles from './LoginForm.module.css';
 
 interface LoginFormState {
@@ -25,7 +26,7 @@ export function LoginForm() {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginFormState) => {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(API_CONFIG.endpoints.login, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
