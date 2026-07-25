@@ -32,6 +32,13 @@
 - [x] Application Integration — Wrapped root trees in `ToastProvider` (`vitacore/src/App.tsx` and `nexcore/src/app/providers.tsx`) and added interactive trigger buttons (`Success`, `Error`, `Warning`, `Info`) in both stack dashboards.
 - [x] React Doctor Verification — Maintained **100/100 Great** audit score across both stacks.
 
+**App Shell & Collapsible Navigation Sidebar (vitacore + nexcore 1:1 Parity) (COMPLETE)**
+
+- [x] Rules Updated — Enforced 100% mobile responsiveness invariant in `AGENTS.md` and `.agents/AGENTS.md`.
+- [x] `vitacore/src/components/layout/AppShell/` & `nexcore/src/components/layout/AppShell/` — Implemented App Shell & Collapsible Navigation Sidebar (`types.ts`, `Sidebar.tsx`, `AppHeader.tsx`, `AppShell.tsx`, `AppShell.module.css`) with desktop collapse toggle (`ChevronLeft` / `ChevronRight`), mobile off-canvas drawer overlay (`Menu` button), `Escape` key close handling, user profile status badge, and `LogoutButton`.
+- [x] Application Integration — Wrapped protected layouts (`nexcore/src/app/(app)/layout.tsx` and `vitacore/src/features/dashboard/Dashboard.tsx`) in `AppShell`.
+- [x] React Doctor Verification — Maintained **100/100 Great** audit score across both stacks.
+
 ---
 
 ## Session: 2026-07-24

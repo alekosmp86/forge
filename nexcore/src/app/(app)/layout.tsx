@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { validateSession } from '@/core/auth/session';
+import { AppShell } from '@/components/layout/AppShell/AppShell';
 
 /**
  * Protected app shell layout.
@@ -17,5 +18,5 @@ export default async function AppLayout({
     redirect('/login');
   }
 
-  return <>{children}</>;
+  return <AppShell>{children}</AppShell>;
 }

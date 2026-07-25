@@ -11,4 +11,5 @@
 
 # Language and Component Architecture Rules
 
+- **Make UI components mobile-first:** Always design and write CSS layouts prioritizing mobile viewports first (e.g. mobile drawer/overlay for sidebars), scaling up with responsive breakpoints. Every UI component, layout, and navigation element must be 100% functional on mobile viewports.
 - **No barrel export for single components:** Do not create `index.ts` files inside individual single-component subdirectories (e.g. avoid `LogoutButton/index.ts` or `Input/index.ts`). Import components directly from their explicit file path (e.g. `./LogoutButton/LogoutButton`).

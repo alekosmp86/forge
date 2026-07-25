@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { CheckCircle2, AlertTriangle, Info, AlertCircle } from 'lucide-react';
 import type { ICurrentUser } from '@forge/shared-types';
-import { LogoutButton } from '../../components/ui/LogoutButton/LogoutButton';
 import { Button } from '../../components/ui/Button/Button';
 import { ButtonVariant } from '../../components/ui/Button/types';
 import { ConfirmationModal } from '../../components/ui/ConfirmationModal/ConfirmationModal';
 import { ModalVariant } from '../../components/ui/ConfirmationModal/types';
 import { useToast } from '../../components/ui/Toast/useToast';
+import { AppShell } from '../../components/layout/AppShell/AppShell';
 import styles from './Dashboard.module.css';
 
 interface DashboardProps {
@@ -28,16 +28,7 @@ export function Dashboard({ currentUser }: DashboardProps) {
   };
 
   return (
-    <main className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.brand}>
-          <span className={styles.logo}>vitacore</span>
-          <span className={styles.badge}>Vite Kernel</span>
-        </div>
-
-        <LogoutButton />
-      </header>
-
+    <AppShell currentUser={currentUser} brandName="vitacore" brandBadge="Vite Kernel">
       <section className={styles.content}>
         <div className={styles.card}>
           <h1 className={styles.welcome}>Welcome back!</h1>
@@ -119,6 +110,6 @@ export function Dashboard({ currentUser }: DashboardProps) {
         onConfirm={handleConfirm}
         onCancel={() => setIsModalOpen(false)}
       />
-    </main>
+    </AppShell>
   );
 }
