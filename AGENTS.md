@@ -42,10 +42,13 @@ This workspace contains the **Forge** — a set of reusable template repositorie
 
 ---
 
-# Frontend Equivalence Invariant: vitacore + javacore = nexcore
+# Cross-Stack Replication & Equivalence Invariant
 
 - **vitacore + javacore = nexcore:** The only difference across template repositories is backend technology (`javacore` Spring Boot 3 vs `nexcore` Next.js 15 internal backend vs `vitacore` Vite SPA frontend).
-- **1:1 UI/UX Parity:** Both `vitacore` and `nexcore` define their own UI components independently, but every component must be visually and behaviorally identical across both repositories (layout, design tokens, CSS modules, responsive behavior, icons, and interactions).
+- **1:1 UI/UX & Backend Feature Parity:** Every feature, component, API endpoint, or architectural change implemented in one stack must immediately be replicated across all relevant sibling stacks:
+  - **Frontend Components & Modals:** Any new UI component, modal (e.g., confirmation modals), layout update, or design system addition introduced in `vitacore` must be replicated in `nexcore` (and vice-versa) with 1:1 visual, interaction, and behavioral parity.
+  - **Backend Services & API Endpoints:** Any new backend feature, API route/endpoint, service method, or database schema change introduced in `nexcore` internal backend must be replicated in `javacore` Spring Boot backend (and vice-versa).
+  - **Shared Contracts & DTOs:** Update `@forge/shared-types` whenever DTOs, request payloads, or response shapes change so all stacks remain in sync.
 
 ---
 

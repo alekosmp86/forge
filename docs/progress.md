@@ -1,5 +1,26 @@
 # Forge — Progress Log
 
+## Session: 2026-07-25
+
+### What Was Built
+
+**Cross-Stack Replication & Equivalence Invariant Rule (COMPLETE)**
+
+- [x] `AGENTS.md` & `.agents/AGENTS.md` — Added project-wide Cross-Stack Replication Rule mandating 1:1 parity and immediate cross-stack replication across `vitacore`, `nexcore`, `javacore`, and `@forge/shared-types` whenever frontend components, backend services, API endpoints, or data models are added or modified.
+
+**ConfirmationModal Component (vitacore + nexcore 1:1 Parity) (COMPLETE)**
+
+- [x] `vitacore/src/components/ui/ConfirmationModal/` — Built `ConfirmationModal` component (`types.ts`, `ConfirmationModal.module.css`, `ConfirmationModal.tsx`) with backdrop blur, `Escape` key close handling, `lucide-react` variant icons, loading states, and mobile-first CSS Modules layout.
+- [x] `nexcore/src/components/ui/ConfirmationModal/` — Replicated `ConfirmationModal` with 1:1 feature, visual, and architectural parity.
+- [x] `vitacore/src/features/dashboard/Dashboard.tsx` & `nexcore/src/app/(app)/dashboard/components/DashboardInteractiveDemo.tsx` — Integrated interactive demo triggers in both stack dashboards for visual and interaction testing.
+
+**Database Seed Script (COMPLETE)**
+
+- [x] `nexcore/prisma/seed.ts` — Enhanced Prisma seed script to seed both `admin@forge.com` (ADMIN) and `user@forge.com` (USER) matching `javacore` seed data 1:1.
+- [x] `nexcore/package.json` & `package.json` — Added `"db:seed"` script to `nexcore/package.json` (`prisma db seed`) and root `package.json` (`npm run db:seed --workspace=nexcore`).
+
+---
+
 ## Session: 2026-07-24
 
 ### What Was Built

@@ -12,6 +12,8 @@
     "create-javacore": "node scripts/create-javacore.js",
     "create-vitacore": "node scripts/create-vitacore.js",
     "create-stack": "node scripts/create-stack.js",
+    "nexcore:seed": "npm run db:seed --workspace=nexcore",
+    "db:seed": "npm run db:seed --workspace=nexcore",
     "javacore:run": "cd javacore && mvn spring-boot:run",
     "javacore:debug": "cd javacore && mvn spring-boot:run -Pdebug",
     "javacore:stop": "powershell -Command \"$conn = Get-NetTCPConnection -LocalPort 8080,5005 -ErrorAction SilentlyContinue; if ($conn) { $conn | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Write-Host 'Stopped javacore processes.' } else { Write-Host 'No running javacore processes found.' }\"",

@@ -5,7 +5,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 
 async function main() {
-  console.log('Seeding initial admin user...');
+  console.log('🌱 Seeding database initial users...');
 
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
@@ -16,36 +16,48 @@ async function main() {
   const adapter = new PrismaPg(pool);
   const prisma = new PrismaClient({ adapter });
 
-  const email = 'admin@forge.com';
-  const password = 'password123';
   const BCRYPT_SALT_ROUNDS = 12;
+  const defaultPassword = 'password123';
+  const passwordHash = await bcrypt.hash(defaultPassword, BCRYPT_SALT_ROUNDS);
 
-  const passwordHash = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
-
-  const user = await prisma.user.upsert({
-    where: { email },
-    update: {
-      passwordHash,
-      isActive: true,
+  const initialUsers = [
+    {
+      email: 'admin@forge.com',
+      role: 'ADMIN' as const,
     },
-    create: {
-      email,
-      passwordHash,
-      role: 'ADMIN',
-      isActive: true,
+    {
+      email: 'user@forge.com',
+      role: 'USER' as const,
     },
-  });
+  ];
 
-  console.log(`✓ User created/updated successfully!`);
-  console.log(`  Email:    ${user.email}`);
-  console.log(`  Password: ${password}`);
-  console.log(`  Role:     ${user.role}`);
+  for (const userData of initialUsers) {
+    const user = await prisma.user.upsert({
+      where: { email: userData.email },
+      update: {
+        passwordHash,
+        isActive: true,
+      },
+      create: {
+        email: userData.email,
+        passwordHash,
+        role: userData.role,
+        isActive: true,
+      },
+    });
+
+    console.log(`✓ User seeded successfully:`);
+    console.log(`  Email:    ${user.email}`);
+    console.log(`  Password: ${defaultPassword}`);
+    console.log(`  Role:     ${user.role}`);
+  }
 
   await prisma.$disconnect();
   await pool.end();
+  console.log('✨ Seeding completed successfully!');
 }
 
-main().catch((e) => {
-  console.error('Seed error:', e);
+main().catch((error) => {
+  console.error('Seed error:', error);
   process.exit(1);
 });

@@ -2,6 +2,7 @@ import { validateSession } from '@/core';
 import { LogoutButton } from '@/components/ui';
 import { CheckCircle2 } from 'lucide-react';
 import { UserProfile } from './components/UserProfile';
+import { DashboardInteractiveDemo } from './components/DashboardInteractiveDemo';
 import styles from './page.module.css';
 
 export default async function DashboardPage() {
@@ -44,6 +45,8 @@ export default async function DashboardPage() {
               </li>
             </ul>
           </div>
+
+          <DashboardInteractiveDemo />
         </div>
       </section>
     </main>
