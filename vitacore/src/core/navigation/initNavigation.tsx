@@ -1,5 +1,5 @@
 import { LayoutDashboard, Layers, Settings, ShieldCheck, ShoppingCart } from 'lucide-react';
-import { navRegistry } from './navRegistry';
+import { navRegistry, NavSection } from './navRegistry';
 
 let isInitialized = false;
 
@@ -15,6 +15,7 @@ export function initCoreNavigation(): void {
       href: '#',
       isActive: true,
       order: 10,
+      section: NavSection.MAIN,
     },
     {
       id: 'sales-module',
@@ -23,6 +24,7 @@ export function initCoreNavigation(): void {
       href: '#',
       badge: 'Module',
       order: 20,
+      section: NavSection.MAIN,
     },
     {
       id: 'modules',
@@ -31,6 +33,7 @@ export function initCoreNavigation(): void {
       href: '#',
       badge: 'Core',
       order: 30,
+      section: NavSection.MAIN,
     },
     {
       id: 'security',
@@ -38,6 +41,7 @@ export function initCoreNavigation(): void {
       icon: <ShieldCheck size={18} aria-hidden="true" />,
       href: '#',
       order: 40,
+      section: NavSection.SETTINGS,
     },
     {
       id: 'settings',
@@ -45,6 +49,7 @@ export function initCoreNavigation(): void {
       icon: <Settings size={18} aria-hidden="true" />,
       href: '#',
       order: 50,
+      section: NavSection.SETTINGS,
     },
   ]);
 }

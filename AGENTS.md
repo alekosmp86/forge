@@ -26,8 +26,8 @@ This workspace contains the **Forge** — a set of reusable template repositorie
 
 # Comparisons and String Literals
 
-- **Do not compare against string literals.** Statuses, types, and logic reasons must be defined once as constants/enums and imported, rather than compared against raw string literals (like `=== "no_reservation"`).
-- **Use const objects for enums.** Do not use TypeScript native `enum` declarations. Define enums as `as const` object literals (e.g. `export const MyEnum = { ... } as const; export type MyEnum = (typeof MyEnum)[keyof typeof MyEnum];`) so they act like constants with strict type safety.
+- **Do not compare against string literals or use inline string literal unions.** Statuses, categories, sections, types, and logic reasons must be defined once as `as const` object enums and imported, rather than compared against raw string literals (like `=== "no_reservation"`) or declared as inline union strings (like `'main' | 'admin'`).
+- **Use const objects for enums.** Do not use TypeScript native `enum` declarations or raw string literal unions. Define enums as `as const` object literals (e.g. `export const MyEnum = { ... } as const; export type MyEnum = (typeof MyEnum)[keyof typeof MyEnum];`) so they act like constants with strict type safety.
 
 ---
 

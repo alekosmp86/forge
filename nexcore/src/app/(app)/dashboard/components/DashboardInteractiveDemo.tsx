@@ -8,7 +8,7 @@ import { ConfirmationModal } from '@/components/ui/ConfirmationModal/Confirmatio
 import { ModalVariant } from '@/components/ui/ConfirmationModal/types';
 import { useToast } from '@/components/ui/Toast/useToast';
 import { FileUploader } from '@/components/ui/FileUploader/FileUploader';
-import { navRegistry } from '@/core/navigation/navRegistry';
+import { navRegistry, NavSection } from '@/core/navigation/navRegistry';
 
 export function DashboardInteractiveDemo() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -92,6 +92,7 @@ export function DashboardInteractiveDemo() {
                 href: '#',
                 badge: 'New',
                 order: 15,
+                section: NavSection.MAIN,
               });
               setNavUpdateCount((prev) => prev + 1);
               toast.success('Analytics Module injected into Sidebar!', 'Module Registered');
