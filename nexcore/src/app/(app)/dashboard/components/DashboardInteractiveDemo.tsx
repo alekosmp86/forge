@@ -8,7 +8,8 @@ import { ConfirmationModal } from '@/components/ui/ConfirmationModal/Confirmatio
 import { ModalVariant } from '@/components/ui/ConfirmationModal/types';
 import { useToast } from '@/components/ui/Toast/useToast';
 import { FileUploader } from '@/components/ui/FileUploader/FileUploader';
-import { navRegistry, NavSection } from '@/core/navigation/navRegistry';
+import { navRegistry } from '@/core/navigation/navRegistry';
+import { NavSection } from '@/core/navigation/types';
 
 export function DashboardInteractiveDemo() {
   const [isModalOpen, setIsModalOpen] = useState(false);

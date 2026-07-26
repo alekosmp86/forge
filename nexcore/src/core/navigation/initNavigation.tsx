@@ -1,7 +1,8 @@
 'use client';
 
 import { LayoutDashboard, Layers, Settings, ShieldCheck, ShoppingCart } from 'lucide-react';
-import { navRegistry, NavSection } from './navRegistry';
+import { navRegistry } from './navRegistry';
+import { NavSection } from './types';
 
 let isInitialized = false;
 

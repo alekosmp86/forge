@@ -11,6 +11,6 @@
 
 # Language and Component Architecture Rules
 
-- **Use const objects for enums:** Do not use TypeScript native `enum` declarations or raw string literal unions (like `'main' | 'admin'`). Define enums as `as const` object literals (e.g. `export const NavSection = { MAIN: 'main', ADMIN: 'admin' } as const; export type NavSection = (typeof NavSection)[keyof typeof NavSection];`) so they act like constants with strict type safety.
+- **Use const objects for enums & isolate into types.ts:** Do not use TypeScript native `enum` declarations or raw string literal unions (like `'main' | 'admin'`). Define enums as `as const` object literals (e.g. `export const NavSection = { MAIN: 'main', ADMIN: 'admin' } as const; export type NavSection = (typeof NavSection)[keyof typeof NavSection];`) in a dedicated `types.ts` file so modules can independently import and reuse them without importing components or registry instances.
 - **Make UI components mobile-first:** Always design and write CSS layouts prioritizing mobile viewports first (e.g. mobile drawer/overlay for sidebars), scaling up with responsive breakpoints. Every UI component, layout, and navigation element must be 100% functional on mobile viewports.
 - **No barrel export for single components:** Do not create `index.ts` files inside individual single-component subdirectories (e.g. avoid `LogoutButton/index.ts` or `Input/index.ts`). Import components directly from their explicit file path (e.g. `./LogoutButton/LogoutButton`).
