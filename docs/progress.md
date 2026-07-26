@@ -39,6 +39,14 @@
 - [x] Application Integration — Wrapped protected layouts (`nexcore/src/app/(app)/layout.tsx` and `vitacore/src/features/dashboard/Dashboard.tsx`) in `AppShell`.
 - [x] React Doctor Verification — Maintained **100/100 Great** audit score across both stacks.
 
+**File Upload Service & UI Uploader (vitacore + nexcore + javacore 1:1 Parity) (COMPLETE)**
+
+- [x] `packages/shared-types` — Added `IUploadedFile` & `FileUploadOptions` contracts.
+- [x] `nexcore/src/core/storage/` & `javacore/src/main/java/com/forge/javacore/core/storage/` — Implemented `IStorageService` strategy pattern interface & `LocalStorageService` cloud-ready implementations.
+- [x] Backend Controllers — Implemented `POST /api/upload` & `DELETE /api/upload` endpoints in Next.js (`nexcore/src/app/api/upload/route.ts`) and Spring Boot 3 (`javacore/src/main/java/com/forge/javacore/features/upload/UploadController.java`).
+- [x] UI Component `FileUploader` — Built drag-and-drop UI component (`FileUploader.tsx`, `useFileUpload.ts`, `FileUploader.module.css`, `types.ts`) with upload progress percentage bar, file validation (10MB limit), preview icon, and delete button in `vitacore` and `nexcore`.
+- [x] React Doctor & Build Verification — `javacore` Maven build passed (`BUILD SUCCESS`), `vitacore` and `nexcore` achieved **100/100 Great** scores.
+
 ---
 
 ## Session: 2026-07-24

@@ -7,6 +7,7 @@ import { ButtonVariant } from '@/components/ui/Button/types';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal/ConfirmationModal';
 import { ModalVariant } from '@/components/ui/ConfirmationModal/types';
 import { useToast } from '@/components/ui/Toast/useToast';
+import { FileUploader } from '@/components/ui/FileUploader/FileUploader';
 
 export function DashboardInteractiveDemo() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,6 +59,19 @@ export function DashboardInteractiveDemo() {
           >
             Info Toast
           </Button>
+        </div>
+
+        <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
+          <h2>File Upload Service Demo</h2>
+          <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginBottom: '1rem' }}>
+            Test drag-and-drop file uploader with progress tracking (SOLID Strategy pattern):
+          </p>
+          <FileUploader
+            label="Attachment Uploader"
+            hint="Upload any file up to 10MB (Saved via Storage Service)"
+            onUploadSuccess={(file) => toast.success(`File "${file.originalName}" uploaded successfully!`, 'File Uploaded')}
+            onDeleteSuccess={(filename) => toast.info(`File ${filename} removed.`, 'File Removed')}
+          />
         </div>
       </div>
 

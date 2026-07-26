@@ -69,3 +69,21 @@ export interface PaginatedResponse<TData> {
   page: number;
   pageSize: number;
 }
+
+// ─── File Upload ──────────────────────────────────────────────────────────────
+
+export interface IUploadedFile {
+  id: string;
+  filename: string;
+  originalName: string;
+  mimeType: string;
+  size: number;
+  url: string;
+  createdAt: string;
+}
+
+export interface FileUploadOptions {
+  maxSizeInBytes?: number;
+  allowedMimeTypes?: string[];
+  multiple?: boolean;
+}
