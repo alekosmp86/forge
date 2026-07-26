@@ -29,3 +29,6 @@ export { createSession, deleteSession, validateSession, SESSION_COOKIE_NAME } fr
 export { signSessionToken, verifySessionToken, hashTokenId } from './auth/tokens';
 export type { ISessionPayload, AuthCredentials, AuthResult } from './auth/types';
 export type { ICurrentUser, IPublicUser, UserRole, ApiResponse, PaginatedResponse } from './types';
+export { FG } from './extension/FG';
+export { NavSection, type ModuleNavItem } from './navigation/types';
+export { navRegistry } from './navigation/navRegistry';

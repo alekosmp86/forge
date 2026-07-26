@@ -1,5 +1,5 @@
 import { LayoutDashboard, Layers, Settings, ShieldCheck, ShoppingCart } from 'lucide-react';
-import { navRegistry } from './navRegistry';
+import { FG } from '../extension/FG';
 import { NavSection } from './types';
 
 let isInitialized = false;
@@ -8,7 +8,7 @@ export function initCoreNavigation(): void {
   if (isInitialized) return;
   isInitialized = true;
 
-  navRegistry.registerMany([
+  FG.UI.Sidebar.registerMany([
     {
       id: 'dashboard',
       label: 'Dashboard',

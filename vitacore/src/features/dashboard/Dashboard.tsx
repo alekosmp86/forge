@@ -8,7 +8,7 @@ import { ModalVariant } from '../../components/ui/ConfirmationModal/types';
 import { useToast } from '../../components/ui/Toast/useToast';
 import { AppShell } from '../../components/layout/AppShell/AppShell';
 import { FileUploader } from '../../components/ui/FileUploader/FileUploader';
-import { navRegistry } from '../../core/navigation/navRegistry';
+import { FG } from '../../core/extension/FG';
 import { NavSection } from '../../core/navigation/types';
 import styles from './Dashboard.module.css';
 
@@ -116,13 +116,13 @@ export function Dashboard({ currentUser }: DashboardProps) {
             <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
               <h2>Module Navigation Extension Demo</h2>
               <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginBottom: '1rem' }}>
-                Inject dynamic navigation options into the Sidebar using core <code>navRegistry</code>:
+                Inject dynamic navigation options into the Sidebar using core <code>FG.UI.Sidebar.register(...)</code>:
               </p>
               <Button
                 variant={ButtonVariant.PRIMARY}
                 leftIcon={<PlusCircle size={16} />}
                 onClick={() => {
-                  navRegistry.register({
+                  FG.UI.Sidebar.register({
                     id: 'analytics-module',
                     label: 'Analytics & Reports',
                     icon: <BarChart2 size={18} aria-hidden="true" />,
