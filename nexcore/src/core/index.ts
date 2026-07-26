@@ -31,4 +31,5 @@ export type { ISessionPayload, AuthCredentials, AuthResult } from './auth/types'
 export type { ICurrentUser, IPublicUser, UserRole, ApiResponse, PaginatedResponse } from './types';
 export { FG } from './extension/FG';
 export { NavSection, type ModuleNavItem } from './navigation/types';
-export { navRegistry, useNavItems } from './navigation/navRegistry';
+export { navRegistry } from './navigation/navRegistry';
+export { useNavItems } from './navigation/useNavItems';

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styles from './AppShell.module.css';
 import { Sidebar } from './Sidebar';
 import { AppHeader } from './AppHeader';
-import { useNavItems } from '../../../core/navigation/navRegistry';
+import { useNavItems } from '../../../core/navigation/useNavItems';
 import { initCoreNavigation } from '../../../core/navigation/initNavigation';
 import type { AppShellProps } from './types';
 

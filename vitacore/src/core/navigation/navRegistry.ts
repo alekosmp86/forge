@@ -1,4 +1,3 @@
-import { useSyncExternalStore, useCallback } from 'react';
 import { UserRole } from '@forge/shared-types';
 import type { ModuleNavItem } from './types';
 
@@ -64,20 +63,3 @@ export class NavigationRegistry {
 }
 
 export const navRegistry = new NavigationRegistry();
-
-/**
- * Custom React hook to reactively subscribe to navRegistry changes.
- */
-export function useNavItems(userRole?: UserRole): ModuleNavItem[] {
-  const subscribe = useCallback(
-    (onStoreChange: () => void) => navRegistry.subscribe(onStoreChange),
-    []
-  );
-
-  const getSnapshot = useCallback(
-    () => navRegistry.getItems(userRole),
-    [userRole]
-  );
-
-  return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
-}
