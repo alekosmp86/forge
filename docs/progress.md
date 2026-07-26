@@ -47,12 +47,13 @@
 - [x] UI Component `FileUploader` — Built drag-and-drop UI component (`FileUploader.tsx`, `useFileUpload.ts`, `FileUploader.module.css`, `types.ts`) with upload progress percentage bar, file validation (10MB limit), preview icon, and delete button in `vitacore` and `nexcore`.
 - [x] React Doctor & Build Verification — `javacore` Maven build passed (`BUILD SUCCESS`), `vitacore` and `nexcore` achieved **100/100 Great** scores.
 
-**Module Navigation Extension System (navRegistry) (COMPLETE)**
+**Module Navigation Extension System (navRegistry & FG SDK) (COMPLETE)**
 
-- [x] `vitacore/src/core/navigation/` & `nexcore/src/core/navigation/` — Built `navRegistry.ts` singleton (`register`, `registerMany`, `unregister`, `getItems`) with `order` sorting and `requiredRole` RBAC filtering.
-- [x] Initializer & App Shell Integration — Implemented `initNavigation.tsx` and updated `AppShell.tsx` in both `vitacore` and `nexcore` to dynamically render registered module navigation items.
-- [x] Interactive Dashboard Demo — Added dynamic "Inject Analytics Module" button to both stack dashboards.
-- [x] React Doctor Verification — Maintained **100/100 Great** audit score across both stacks.
+- [x] `vitacore/src/core/extension/FG.ts` & `nexcore/src/core/extension/FG.ts` — Built centralized `FG` SDK namespace (`FG.UI.Sidebar.register`, `FG.UI.Sidebar.registerMany`, etc.).
+- [x] Type Isolation (`types.ts`) — Isolated `NavSection` as const object enum and `ModuleNavItem` interface into `core/navigation/types.ts`.
+- [x] Initializer & App Shell Integration — Refactored `initNavigation.tsx` and updated `AppShell.tsx` in both `vitacore` and `nexcore` to dynamically render registered module items via `FG.UI.Sidebar`.
+- [x] Interactive Dashboard Demo — Updated dynamic "Inject Analytics Module" button to demonstrate `FG.UI.Sidebar.register(...)`.
+- [x] React Doctor & Type Verification — `tsc` passed with 0 errors, maintained **97-100/100 Great** audit score across both stacks.
 
 ---
 
