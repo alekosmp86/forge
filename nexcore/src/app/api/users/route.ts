@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { UserRole } from '@forge/shared-types';
 import { validateSession, paginationSchema, forbidden, unauthorized, toErrorResponse, prisma } from '@/core';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -8,7 +9,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       return unauthorized('Authentication required');
     }
 
-    if (session.role !== 'ADMIN') {
+    if (session.role !== UserRole.ADMIN) {
       return forbidden('Admin role required');
     }
 

@@ -1,4 +1,4 @@
-import type { UserRole } from '@forge/shared-types';
+import { UserRole } from '@forge/shared-types';
 import type { ModuleNavItem } from './types';
 
 export class NavigationRegistry {
@@ -23,7 +23,7 @@ export class NavigationRegistry {
       .filter((item) => {
         if (!item.requiredRole) return true;
         if (!userRole) return false;
-        if (item.requiredRole === 'ADMIN' && userRole !== 'ADMIN') return false;
+        if (item.requiredRole === UserRole.ADMIN && userRole !== UserRole.ADMIN) return false;
         return true;
       })
       .sort((a, b) => (a.order ?? 100) - (b.order ?? 100));

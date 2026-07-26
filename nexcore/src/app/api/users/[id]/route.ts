@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { UserRole } from '@forge/shared-types';
 import { validateSession, userService, idSchema, notFound, forbidden, unauthorized, badRequest, toErrorResponse } from '@/core';
 
 export async function GET(
@@ -18,7 +19,7 @@ export async function GET(
     }
 
     // RBAC: users can only view their own profile unless they are ADMIN
-    if (session.userId !== id && session.role !== 'ADMIN') {
+    if (session.userId !== id && session.role !== UserRole.ADMIN) {
       return forbidden('You do not have permission to view this profile');
     }
 

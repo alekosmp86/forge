@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
+import { UserRole } from '@forge/shared-types';
 
 async function main() {
   console.log('🌱 Seeding database initial users...');
@@ -23,11 +24,11 @@ async function main() {
   const initialUsers = [
     {
       email: 'admin@forge.com',
-      role: 'ADMIN' as const,
+      role: UserRole.ADMIN,
     },
     {
       email: 'user@forge.com',
-      role: 'USER' as const,
+      role: UserRole.USER,
     },
   ];
 
