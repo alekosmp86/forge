@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle2, AlertTriangle, Info, AlertCircle } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Info, AlertCircle, BarChart2, PlusCircle } from 'lucide-react';
 import type { ICurrentUser } from '@forge/shared-types';
 import { Button } from '../../components/ui/Button/Button';
 import { ButtonVariant } from '../../components/ui/Button/types';
@@ -8,6 +8,7 @@ import { ModalVariant } from '../../components/ui/ConfirmationModal/types';
 import { useToast } from '../../components/ui/Toast/useToast';
 import { AppShell } from '../../components/layout/AppShell/AppShell';
 import { FileUploader } from '../../components/ui/FileUploader/FileUploader';
+import { navRegistry } from '../../core/navigation/navRegistry';
 import styles from './Dashboard.module.css';
 
 interface DashboardProps {
@@ -17,6 +18,7 @@ interface DashboardProps {
 export function Dashboard({ currentUser }: DashboardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
+  const [, setNavUpdateCount] = useState(0);
   const toast = useToast();
 
   const handleConfirm = () => {
@@ -108,6 +110,31 @@ export function Dashboard({ currentUser }: DashboardProps) {
                 onUploadSuccess={(file) => toast.success(`File "${file.originalName}" uploaded successfully!`, 'File Uploaded')}
                 onDeleteSuccess={(filename) => toast.info(`File ${filename} removed.`, 'File Removed')}
               />
+            </div>
+
+            <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
+              <h2>Module Navigation Extension Demo</h2>
+              <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginBottom: '1rem' }}>
+                Inject dynamic navigation options into the Sidebar using core <code>navRegistry</code>:
+              </p>
+              <Button
+                variant={ButtonVariant.PRIMARY}
+                leftIcon={<PlusCircle size={16} />}
+                onClick={() => {
+                  navRegistry.register({
+                    id: 'analytics-module',
+                    label: 'Analytics & Reports',
+                    icon: <BarChart2 size={18} aria-hidden="true" />,
+                    href: '#',
+                    badge: 'New',
+                    order: 15,
+                  });
+                  setNavUpdateCount((prev) => prev + 1);
+                  toast.success('Analytics Module injected into Sidebar!', 'Module Registered');
+                }}
+              >
+                Inject Analytics Module
+              </Button>
             </div>
           </div>
         </div>

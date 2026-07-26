@@ -1,44 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { LayoutDashboard, Layers, Settings, ShieldCheck } from 'lucide-react';
 import styles from './AppShell.module.css';
 import { Sidebar } from './Sidebar';
 import { AppHeader } from './AppHeader';
-import type { AppShellProps, NavItem } from './types';
+import { navRegistry } from '@/core/navigation/navRegistry';
+import { initCoreNavigation } from '@/core/navigation/initNavigation';
+import type { AppShellProps } from './types';
 
-const DEFAULT_NAV_ITEMS: NavItem[] = [
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    icon: <LayoutDashboard size={18} aria-hidden="true" />,
-    href: '#',
-    isActive: true,
-  },
-  {
-    id: 'modules',
-    label: 'Modules',
-    icon: <Layers size={18} aria-hidden="true" />,
-    href: '#',
-    badge: 'Core',
-  },
-  {
-    id: 'security',
-    label: 'Security & Auth',
-    icon: <ShieldCheck size={18} aria-hidden="true" />,
-    href: '#',
-  },
-  {
-    id: 'settings',
-    label: 'Settings',
-    icon: <Settings size={18} aria-hidden="true" />,
-    href: '#',
-  },
-];
+// Initialize core navigation items into registry
+initCoreNavigation();
 
 export function AppShell({
   children,
-  navItems = DEFAULT_NAV_ITEMS,
+  navItems,
   title = 'Dashboard',
   subtitle = 'Kernel Shell Management',
   currentUser,
@@ -47,6 +22,8 @@ export function AppShell({
 }: AppShellProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  const effectiveNavItems = navItems ?? navRegistry.getItems(currentUser?.role);
 
   const shellClasses = [
     styles.shell,
@@ -58,7 +35,7 @@ export function AppShell({
   return (
     <div className={shellClasses}>
       <Sidebar
-        items={navItems}
+        items={effectiveNavItems}
         isCollapsed={isCollapsed}
         onToggleCollapse={() => setIsCollapsed((prev) => !prev)}
         isMobileOpen={isMobileOpen}
