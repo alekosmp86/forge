@@ -4,7 +4,7 @@ import { useState } from 'react';
 import styles from './AppShell.module.css';
 import { Sidebar } from './Sidebar';
 import { AppHeader } from './AppHeader';
-import { navRegistry } from '@/core/navigation/navRegistry';
+import { useNavItems } from '@/core/navigation/navRegistry';
 import { initCoreNavigation } from '@/core/navigation/initNavigation';
 import type { AppShellProps } from './types';
 
@@ -23,7 +23,8 @@ export function AppShell({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  const effectiveNavItems = navItems ?? navRegistry.getItems(currentUser?.role);
+  const registeredNavItems = useNavItems(currentUser?.role);
+  const effectiveNavItems = navItems ?? registeredNavItems;
 
   const shellClasses = [
     styles.shell,
