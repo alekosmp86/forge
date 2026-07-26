@@ -10,15 +10,6 @@ export default async function DashboardPage() {
 
   return (
     <main className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.brand}>
-          <span className={styles.logo}>nexcore</span>
-          <span className={styles.badge}>Kernel Shell</span>
-        </div>
-
-        <LogoutButton />
-      </header>
-
       <section className={styles.content}>
         <div className={styles.card}>
           <h1 className={styles.welcome}>Welcome back!</h1>
