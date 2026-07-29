@@ -185,6 +185,7 @@
 - [x] 1:1 Post-Login Dashboard Parity — Refactored `vitacore` dashboard to match `nexcore` layout, headers, cards, and status check icons 1:1 with CSS Modules.
 - [x] AGENTS.md Standards — Added `vitacore + javacore = nexcore` Frontend Equivalence Invariant and `No barrel export for single components` rule.
 - [x] React Doctor Audit — Achieved **100/100 Great** score (`npx react-doctor@latest --verbose`), resolving function hoisting, `fetch` status checks, and web storage auth token security rules.
+- [x] Module Catalog TSConfig Requirement — Standardized `modules/<name>/nexcore/tsconfig.json` requirement in `AGENTS.md` and `docs/module-guide.md` to guarantee IDE language servers resolve CSS Modules (`*.module.css`) and Next.js ambient types in template catalog files.
 
 ---
 
@@ -201,6 +202,7 @@
 | UI primitives    | 1:1 shared design across nexcore & vitacore           | Consistent UI/UX across Next.js and Vite     |
 | React Doctor     | Integrated script (`npm run doctor`) & 100% compliant | High code quality and performance invariants |
 | Module Installer | Central `modules/` catalog & `module.json` manifest    | Multi-stack pluggable extension engine       |
+| Module TSConfig  | `modules/<name>/nexcore/tsconfig.json` extends nexcore | Ambient CSS Module & Next.js type resolution |
 
 ---
 
@@ -220,3 +222,5 @@
 3. All business logic lives in services — never in route handlers.
 4. All input validation happens at the route/controller layer.
 5. `proxy.ts` is the single entry point for auth enforcement — don't duplicate auth checks in routes.
+6. Next.js module catalog templates (`modules/<name>/nexcore/`) must include a `tsconfig.json` extending `../../../nexcore/tsconfig.json` and including `next-env.d.ts`.
+

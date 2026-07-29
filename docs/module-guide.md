@@ -177,3 +177,4 @@ FG.UI.Sidebar.register({
 4. **Module types live inside `src/modules/<name>/types.ts`** for 100% directory self-containment.
 5. **Module API endpoints must always be namespaced under `/api/modules/<module-name>`** (e.g. `/api/modules/notifications`) to prevent route collisions with core kernel routes.
 6. **UI Slot Injection**: Modules extend Core UI by registering components into extension slots (`FG.UI.Header.register`, `FG.UI.Sidebar.register`) without mutating core layout components.
+7. **Module Catalog TSConfig Requirement**: Every Next.js module catalog directory (`modules/<name>/nexcore/`) must include a `tsconfig.json` extending `../../../nexcore/tsconfig.json` and including `../../../nexcore/next-env.d.ts`. This ensures TypeScript language servers resolve CSS Modules (`*.module.css`) and Next.js ambient types when viewing/editing catalog modules prior to installation.
