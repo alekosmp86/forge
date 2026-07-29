@@ -2,6 +2,7 @@
 
 import { Menu, User as UserIcon } from 'lucide-react';
 import { LogoutButton } from '@/components/ui/LogoutButton/LogoutButton';
+import { useHeaderSlots } from '@/core/extension/headerRegistry';
 import styles from './AppShell.module.css';
 import type { AppHeaderProps } from './types';
 
@@ -11,6 +12,8 @@ export function AppHeader({
   onOpenMobileNav,
   currentUser,
 }: AppHeaderProps) {
+  const headerSlots = useHeaderSlots();
+
   return (
     <header className={styles.header}>
       <div className={styles.headerLeft}>
@@ -30,6 +33,12 @@ export function AppHeader({
       </div>
 
       <div className={styles.headerRight}>
+        {/* Render dynamically injected module UI slots (e.g. Notifications Bell) */}
+        {headerSlots.map((slot) => {
+          const SlotComponent = slot.component;
+          return <SlotComponent key={slot.id} />;
+        })}
+
         {currentUser && (
           <div className={styles.userBadge}>
             <UserIcon size={14} aria-hidden="true" />

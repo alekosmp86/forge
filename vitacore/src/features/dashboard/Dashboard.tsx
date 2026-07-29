@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle2, AlertTriangle, Info, AlertCircle, BarChart2, PlusCircle } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Info, AlertCircle, BarChart2, PlusCircle, Bell } from 'lucide-react';
 import type { ICurrentUser } from '@forge/shared-types';
 import { Button } from '../../components/ui/Button/Button';
 import { ButtonVariant } from '../../components/ui/Button/types';
@@ -14,6 +14,134 @@ import styles from './Dashboard.module.css';
 
 interface DashboardProps {
   currentUser: ICurrentUser;
+}
+
+function HeaderNotificationBellDemo() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [items, setItems] = useState([
+    { id: '1', title: 'In-App Alerts Module', message: 'Notifications module registered into Core UI.', isRead: false },
+    { id: '2', title: 'Security Alert', message: 'Encrypted JWT session verified.', isRead: false },
+  ]);
+
+  const unreadCount = items.filter((item) => !item.isRead).length;
+
+  const markAllRead = () => {
+    setItems((prev) => prev.map((item) => ({ ...item, isRead: true })));
+  };
+
+  return (
+    <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+      <button
+        type="button"
+        style={{
+          position: 'relative',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '2.25rem',
+          height: '2.25rem',
+          borderRadius: '0.375rem',
+          border: '1px solid var(--color-border, #e2e8f0)',
+          backgroundColor: 'var(--color-surface, #ffffff)',
+          color: 'var(--color-text-secondary, #64748b)',
+          cursor: 'pointer',
+        }}
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-label="Open notifications"
+      >
+        <Bell size={18} aria-hidden="true" />
+        {unreadCount > 0 && (
+          <span
+            style={{
+              position: 'absolute',
+              top: '-0.25rem',
+              right: '-0.25rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: '1.125rem',
+              height: '1.125rem',
+              padding: '0 0.25rem',
+              borderRadius: '9999px',
+              backgroundColor: '#ef4444',
+              color: '#ffffff',
+              fontSize: '0.6875rem',
+              fontWeight: 700,
+            }}
+          >
+            {unreadCount}
+          </span>
+        )}
+      </button>
+
+      {isOpen && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '100%',
+            right: 0,
+            marginTop: '0.5rem',
+            width: '18rem',
+            borderRadius: '0.5rem',
+            border: '1px solid var(--color-border, #e2e8f0)',
+            backgroundColor: 'var(--color-surface, #ffffff)',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)',
+            zIndex: 50,
+            overflow: 'hidden',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0.75rem 1rem',
+              borderBottom: '1px solid var(--color-border, #e2e8f0)',
+              fontWeight: 600,
+              fontSize: '0.875rem',
+            }}
+          >
+            <span>Notifications</span>
+            {unreadCount > 0 && (
+              <button
+                type="button"
+                style={{ background: 'none', border: 'none', color: '#2563eb', fontSize: '0.75rem', cursor: 'pointer' }}
+                onClick={markAllRead}
+              >
+                Mark all read
+              </button>
+            )}
+          </div>
+
+          <div style={{ maxHeight: '16rem', overflowY: 'auto' }}>
+            {items.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  padding: '0.75rem 1rem',
+                  borderBottom: '1px solid var(--color-border, #f1f5f9)',
+                  cursor: 'pointer',
+                  backgroundColor: !item.isRead ? '#eff6ff' : 'transparent',
+                }}
+                onClick={() =>
+                  setItems((prev) =>
+                    prev.map((i) => (i.id === item.id ? { ...i, isRead: true } : i))
+                  )
+                }
+              >
+                <div style={{ fontWeight: 600, fontSize: '0.8125rem', color: 'var(--color-text, #0f172a)' }}>
+                  {item.title}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary, #64748b)', marginTop: '0.25rem' }}>
+                  {item.message}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export function Dashboard({ currentUser }: DashboardProps) {
@@ -98,6 +226,37 @@ export function Dashboard({ currentUser }: DashboardProps) {
               >
                 Info Toast
               </Button>
+            </div>
+
+            <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
+              <h2>Notifications Module & UI Slot Injection Demo</h2>
+              <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginBottom: '1rem' }}>
+                Test the <code>notifications</code> module: Inject a Notification Bell into Core Header via <code>FG.UI.Header.register(...)</code> or dispatch an alert:
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+                <Button
+                  variant={ButtonVariant.PRIMARY}
+                  leftIcon={<PlusCircle size={16} />}
+                  onClick={() => {
+                    FG.UI.Header.register({
+                      id: 'notifications-bell',
+                      order: 5,
+                      component: HeaderNotificationBellDemo,
+                    });
+                    toast.success('Notification Bell injected into Core AppHeader!', 'UI Slot Injected');
+                  }}
+                >
+                  Inject Notification Bell into Header
+                </Button>
+
+                <Button
+                  variant={ButtonVariant.SECONDARY}
+                  leftIcon={<Bell size={16} />}
+                  onClick={() => toast.info('New in-app notification received from backend service!', 'In-App Notification')}
+                >
+                  Send In-App Alert
+                </Button>
+              </div>
             </div>
 
             <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>

@@ -1,4 +1,7 @@
+'use client';
+
 import { navRegistry } from '../navigation/navRegistry';
+import { headerRegistry } from './headerRegistry';
 
 /**
  * Forge Extension SDK (`FG`).
@@ -7,8 +10,6 @@ import { navRegistry } from '../navigation/navRegistry';
 export const FG = {
   UI: {
     Sidebar: navRegistry,
-    // Future expansion points:
-    // Footer: footerRegistry,
-    // HeaderActions: headerActionsRegistry,
+    Header: headerRegistry,
   },
 } as const;
