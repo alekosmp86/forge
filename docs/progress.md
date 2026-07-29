@@ -1,5 +1,36 @@
 # Forge — Progress Log
 
+## Session: 2026-07-29
+
+### What Was Built
+
+**Modular Architecture Integration & Installer Automation Engine (COMPLETE)**
+
+- [x] `modules/schema/module-manifest.json` — Built JSON schema for `module.json` module manifests (defining ID, name, targets, env vars, Prisma/Flyway schema extensions, and navigation links).
+- [x] `modules/notifications/` — Built reference implementation `notifications` (In-App Alerts) module:
+  - `module.json` manifest specifying direct column additions on core `User` model (`unreadNotificationCount`, `notificationPreferencesJson`) and Flyway `V2__create_notifications_table.sql`.
+  - `nexcore/` (Prisma snippet, `INotificationService`, `NotificationService`, GET/POST API routes, local `types.ts`).
+  - `javacore/` (Flyway migration SQL, `NotificationEntity`, `NotificationRepository`, `INotificationService`, `NotificationService`, `NotificationController`, DTOs, custom exceptions).
+  - `vitacore/` (`useNotifications` React Query hook, local `types.ts`).
+- [x] `scripts/module-installer.js` — Built modular installation engine:
+  - `listAvailableModules()`: Scans `modules/` catalog.
+  - `promptSelectModules()`: Interactive CLI prompt for module multi-selection.
+  - `installModules()`: Copies module source code, merges Prisma schema models & patches direct `User` columns, stages Flyway migration files with consecutive versioning, appends `.env` variables, and links shared types.
+- [x] `scripts/create-nexcore.js` — Enhanced Nexcore bootstrapper with module selection prompt and auto-installation.
+- [x] `scripts/create-javacore.js` — Enhanced Javacore bootstrapper with module selection prompt and Flyway auto-migration.
+- [x] `scripts/create-vitacore.js` — Enhanced Vitacore bootstrapper with module selection prompt.
+- [x] `scripts/create-stack.js` — Enhanced master full-stack bootstrapper to prompt for modules across backend and frontend.
+- [x] `AGENTS.md` & `javacore/.agents/AGENTS.md` — Added mandatory development rules for Lombok annotation usage and strongly-typed Java enums (`@Enumerated(EnumType.STRING)`) to prohibit raw string literal type/status comparisons.
+- [x] Route Namespacing Invariant — Established `/api/modules/<module-name>` URL prefix convention across Java `@RequestMapping`, Next.js App Router routes, and Vitacore hooks to eliminate route collisions with core kernel endpoints.
+- [x] Module Custom Exception Hierarchy — Built `NotificationException`, `NotificationNotFoundException`, `NotificationAccessDeniedException` in Java and `NotificationError`, `NotificationNotFoundError`, `NotificationAccessDeniedError` in TypeScript. Delegated error handling to core `GlobalExceptionHandler` via inheritance without modifying kernel files.
+- [x] Module Types Self-Containment (Option B) — Refactored module domain types (`INotificationDTO`, `CreateNotificationInput`, `NotificationType`) to be declared locally inside `src/modules/<module-name>/types.ts` for 100% module directory self-containment.
+- [x] UI Slot Injection Architecture (`FG.UI.Header`) — Implemented `headerRegistry` extension point, `useHeaderSlots()` hook, and updated `AppHeader` in `vitacore` and `nexcore` to dynamically render injected module components without modifying core layout.
+- [x] Example Dashboard Integration — Built `NotificationBell` component and added interactive "Notifications Module & UI Slot Injection Demo" card to both `vitacore` (`Dashboard.tsx`) and `nexcore` (`DashboardInteractiveDemo.tsx`).
+- [x] UI Component Injection Guide — Comprehensive documentation added to `docs/module-guide.md`, `AGENTS.md`, and `javacore/.agents/AGENTS.md` detailing `FG.UI.Header` and `FG.UI.Sidebar` injection, Next.js `'use client'` rules, and code examples for AI agents and human developers.
+- [x] `docs/module-guide.md` — Updated guide with `module.json` manifest specification, direct column extension rules, UI Slot Injection pattern, and installer execution flow.
+
+---
+
 ## Session: 2026-07-25
 
 ### What Was Built
@@ -169,6 +200,7 @@
 | Shared types     | `@forge/shared-types` npm package via `npm link`      | Proper decoupling, monorepo workspace        |
 | UI primitives    | 1:1 shared design across nexcore & vitacore           | Consistent UI/UX across Next.js and Vite     |
 | React Doctor     | Integrated script (`npm run doctor`) & 100% compliant | High code quality and performance invariants |
+| Module Installer | Central `modules/` catalog & `module.json` manifest    | Multi-stack pluggable extension engine       |
 
 ---
 
@@ -176,14 +208,8 @@
 
 **Immediate priorities:**
 
-1. End-to-end integration testing: run `javacore` Spring Boot REST backend on port 8080 and test `vitacore` Vite SPA frontend against it.
-2. End-to-end integration testing: run `nexcore` Next.js 15 App Router against a local PostgreSQL database.
-3. Scaffold first domain module (e.g. `users-management` or `products`) in `nexcore` and `javacore` following `docs/module-guide.md`.
-
-**Open decisions:**
-
-- When to add OpenAPI / Swagger specification generation to `javacore`?
-- When to implement the OAuth / Social Login module?
+1. Test bootstrapping a new project via `npm run create-stack my-new-app` and selecting `notifications` module.
+2. Build additional module catalog templates (e.g. `organizations`, `file-uploads`, `audit-logs`).
 
 ---
 

@@ -26,8 +26,10 @@ This workspace contains the **Forge** — a set of reusable template repositorie
 
 # Comparisons and String Literals
 
-- **Do not compare against string literals or use inline string literal unions.** Statuses, categories, sections, types, and logic reasons must be defined once as `as const` object enums and imported, rather than compared against raw string literals (like `=== "no_reservation"`) or declared as inline union strings (like `'main' | 'admin'`).
-- **Use const objects for enums.** Do not use TypeScript native `enum` declarations or raw string literal unions. Define enums as `as const` object literals (e.g. `export const MyEnum = { ... } as const; export type MyEnum = (typeof MyEnum)[keyof typeof MyEnum];`) so they act like constants with strict type safety.
+- **Do not compare against string literals or use inline string literal unions.** Statuses, categories, sections, types, and logic reasons must be defined once as `as const` object enums (TypeScript) or Java `enum` classes and imported, rather than compared against raw string literals (like `=== "no_reservation"` or `"INFO"`) or declared as inline union strings (like `'main' | 'admin'`).
+- **Use const objects for TypeScript enums.** Do not use TypeScript native `enum` declarations or raw string literal unions. Define enums as `as const` object literals (e.g. `export const MyEnum = { ... } as const; export type MyEnum = (typeof MyEnum)[keyof typeof MyEnum];`) so they act like constants with strict type safety.
+- **Use Java enums for Java domain types/statuses.** Define Java `enum` classes (mapped with `@Enumerated(EnumType.STRING)` in JPA entities) instead of String literals for domain types, statuses, and options.
+- **Use Lombok annotations in Java.** Use `@Getter`, `@Setter`, `@Data`, `@Builder`, `@RequiredArgsConstructor`, `@NoArgsConstructor`, `@AllArgsConstructor`, and `@Slf4j` to eliminate boilerplate in Java classes, DTOs, entities, services, and controllers. (For JPA entities, use `@Getter`, `@Setter`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor` instead of `@Data`).
 
 ---
 
@@ -65,7 +67,10 @@ This workspace contains the **Forge** — a set of reusable template repositorie
 
 - **The `core/` folder is the kernel.** It is stable and contains only contracts (interfaces/types), auth logic, db client, error handling, and validation utilities. It knows nothing about business domains.
 - **Modules depend on core, never on each other.** No horizontal imports between modules. If two modules need to communicate, that communication goes through core contracts or events.
-- **Each module must be self-contained.** A module folder includes its own types, service interface, service implementation, and (for Next.js) its own API route handlers.
+- **Each module must be 100% self-contained.** A module folder includes its own domain types (`types.ts`), service interface, service implementation, custom exception hierarchy, and API route handlers entirely within `src/modules/<module-name>/`. Modules do not inject types into global packages like `@forge/shared-types`.
+- **Module Custom Exception Hierarchy & Zero-Core Delegation:** Modules must define their own custom exceptions (e.g. `NotificationException extends AppException` in Java, `NotificationError extends AppError` in TypeScript) inside the module package (`/exception/` or `errors.ts`). Because custom module exceptions inherit from kernel base exceptions, the kernel's `GlobalExceptionHandler` automatically catches and formats them without modifying any core kernel code.
+- **Module UI Slot Injection & Extension SDK:** Modules must inject UI elements into Core UI slots dynamically using the Forge Extension SDK (`FG.UI.Header.register`, `FG.UI.Sidebar.register`) without modifying core layouts (`AppHeader.tsx`, `Sidebar.tsx`, `AppShell.tsx`). All slot registries MUST include `'use client'` at the top of the file. See `docs/module-guide.md` for full implementation examples.
+- **Module API endpoints must be namespaced under `/api/modules/<module-name>`.** To prevent route collisions with kernel routes (`/api/auth`, `/api/users`) or between modules, all REST controllers and API handlers for modules must be prefixed with `/api/modules/<module-name>` (e.g., `@RequestMapping("/api/modules/notifications")` in Java, `/api/modules/notifications/route.ts` in Next.js).
 - **Do not implement modules unless explicitly requested.** Document the module integration pattern in `docs/module-guide.md` and wait for the user to decide which modules to add.
 
 ---

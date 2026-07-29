@@ -44,6 +44,7 @@ src/main/java/com/forge/javacore/
   - `AppException.notFound("Resource not found")`
   - `AppException.conflict("Resource already exists")`
 - **Do NOT** throw raw `RuntimeException`, `IllegalArgumentException`, or construct custom HTTP response objects directly inside controllers.
+- **Module Custom Exceptions:** Feature modules should declare domain-specific exceptions extending `AppException` (e.g. `NotificationNotFoundException extends NotificationException` where `NotificationException extends AppException`). They are automatically intercepted by the core `GlobalExceptionHandler` without needing core modifications.
 - All exceptions are intercepted centrally by `GlobalExceptionHandler` and converted into uniform `ErrorResponse` payloads.
 
 ### 3. Centralized Environment & Configuration Properties
@@ -59,3 +60,8 @@ src/main/java/com/forge/javacore/
 ### 5. Naming Conventions & Code Style
 - **No Single-Letter Variables:** Variable names must clearly convey intent (e.g. `userRepository`, `tokenPayload`, `errorMessage`).
 - **Standard API Responses:** All REST API controller endpoints MUST wrap successful response data using `ApiResponse.success(data)` or `ApiResponse.success(data, message)`.
+
+### 6. Lombok & Type Safety
+- **Use Lombok Annotations:** Use Lombok (`@Getter`, `@Setter`, `@Data`, `@Builder`, `@RequiredArgsConstructor`, `@NoArgsConstructor`, `@AllArgsConstructor`, `@Slf4j`) across DTOs, entities, services, and controllers to maintain concise, clean code. (For JPA entities, use `@Getter`, `@Setter`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor` instead of `@Data`).
+- **Use Strongly-Typed Java Enums:** Never compare against or store raw string literals for domain statuses, types, or categories. Always define dedicated Java `enum` classes and map JPA entity fields with `@Enumerated(EnumType.STRING)`.
+

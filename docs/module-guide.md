@@ -1,166 +1,179 @@
-# Module Integration Guide (nexcore)
+# Module Integration Guide (Forge Engine)
 
-This document describes the exact steps for adding a new feature module to `nexcore`. Follow this precisely. Do not deviate.
-
----
-
-## What Is a Module?
-
-A module is a self-contained feature domain. It lives entirely inside `src/modules/<module-name>/` and:
-- Owns its own types, service interface, service implementation, and API route handlers.
-- Imports from `src/core/` for shared utilities (db client, auth, error classes, validation helpers).
-- **Never imports from another module.**
+This document describes the design, manifest specification, and execution flow for pluggable feature modules across `nexcore`, `javacore`, and `vitacore`.
 
 ---
 
-## Module Folder Structure
+## What Is a Module in Forge?
 
-```
-src/modules/<module-name>/
-├── types.ts                ← DTOs and domain types for this module
-├── constants.ts            ← Module-specific enums/constants (as const)
-├── I<Name>Service.ts       ← Service interface (SOLID ISP)
-├── <Name>Service.ts        ← Service implementation
-└── api/                   ← API route handlers
-    ├── index.ts            ← Route: GET/POST /api/<name>
-    └── [id]/
-        └── index.ts        ← Route: GET/PUT/DELETE /api/<name>/[id]
-```
+A module is a self-contained business feature domain that can be selectably installed into any new project via the Forge CLI.
 
-> **Note:** For modules with complex read vs. write semantics, consider splitting:
-> `IProductReader.ts` + `IProductWriter.ts` rather than one monolithic interface.
+Modules live in `modules/<module-name>/` in the repository catalog and contain:
+- **`module.json`**: Manifest declaring module metadata, targets, required `.env` variables, and schema patch extensions.
+- **`nexcore/`**: Next.js service implementation, domain types (`src/modules/<name>/types.ts`), API routes, components, and Prisma schema snippet.
+- **`javacore/`**: Spring Boot entity, repository, service interface, controller, DTOs, domain exceptions, and Flyway SQL migration scripts.
+- **`vitacore/`**: React Query hooks, domain types (`src/modules/<name>/types.ts`), and components for Vite SPA.
 
 ---
 
-## Step-by-Step: Adding a Module
+## Manifest Specification (`module.json`)
 
-### Step 1: Define the Domain Types
-
-Create `src/modules/<name>/types.ts`. Define your DTOs here. If a type is shared with `javacore` or the client, it should live in `@forge/shared-types` and be imported here.
-
-```ts
-// src/modules/products/types.ts
-export interface ProductDTO {
-  id: string;
-  name: string;
-  price: number;
-  createdAt: string;
-  updatedAt: string;
+```json
+{
+  "id": "notifications",
+  "name": "In-App Notifications",
+  "description": "Real-time in-app alerts and unread badge tracking.",
+  "version": "1.0.0",
+  "targets": ["nexcore", "javacore", "vitacore"],
+  "envVariables": {
+    "NOTIFICATIONS_MAX_PAGE_SIZE": "50"
+  },
+  "schemaExtensions": {
+    "userFieldsPrisma": [
+      "unreadNotificationCount Int @default(0)",
+      "notificationPreferencesJson String? @default(\"{}\")"
+    ],
+    "userFlywaySql": [
+      "ALTER TABLE users ADD COLUMN IF NOT EXISTS unread_notification_count INT NOT NULL DEFAULT 0;",
+      "ALTER TABLE users ADD COLUMN IF NOT EXISTS notification_preferences_json TEXT DEFAULT '{}';"
+    ]
+  },
+  "navigationItems": [
+    {
+      "label": "Notifications",
+      "href": "/notifications",
+      "icon": "Bell"
+    }
+  ]
 }
 ```
-
-### Step 2: Define the Service Interface
-
-Create `src/modules/<name>/I<Name>Service.ts`. Keep it narrow — if you have distinct read/write concerns, split into two interfaces.
-
-```ts
-// src/modules/products/IProductService.ts
-import type { ProductDTO } from './types';
-
-export interface IProductService {
-  findAll(): Promise<ProductDTO[]>;
-  findById(productId: string): Promise<ProductDTO | null>;
-  create(data: CreateProductInput): Promise<ProductDTO>;
-  update(productId: string, data: UpdateProductInput): Promise<ProductDTO>;
-  delete(productId: string): Promise<void>;
-}
-```
-
-### Step 3: Implement the Service
-
-Create `src/modules/<name>/<Name>Service.ts`. Import the Prisma client from core.
-
-```ts
-// src/modules/products/ProductService.ts
-import 'server-only';
-import { prisma } from '@/core/db/client';
-import type { IProductService } from './IProductService';
-import type { ProductDTO } from './types';
-
-export const productService: IProductService = {
-  async findAll() { ... },
-  async findById(productId) { ... },
-  async create(data) { ... },
-  async update(productId, data) { ... },
-  async delete(productId) { ... },
-};
-```
-
-### Step 4: Add Prisma Schema Models
-
-Add your model(s) to `prisma/schema.prisma`. Run `npx prisma migrate dev --name add_products` to generate a migration.
-
-### Step 5: Create API Routes
-
-Create route handlers under `src/app/api/<name>/`. Import from your module — not from other modules.
-
-```ts
-// src/app/api/products/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { productService } from '@/modules/products/ProductService';
-import { AppError } from '@/core/errors/AppError';
-import { validateSession } from '@/core/auth/session';
-import { createProductSchema } from '@/modules/products/constants';
-
-export async function GET() {
-  const products = await productService.findAll();
-  return NextResponse.json({ data: products });
-}
-
-export async function POST(req: NextRequest) {
-  const session = await validateSession();
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  const body = await req.json();
-  const parsed = createProductSchema.safeParse(body);
-  if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
-  }
-
-  const product = await productService.create(parsed.data);
-  return NextResponse.json({ data: product }, { status: 201 });
-}
-```
-
-### Step 6: Create Frontend Hooks (if needed)
-
-Create a custom hook in `src/modules/<name>/hooks/` using TanStack Query.
-
-```ts
-// src/modules/products/hooks/useProducts.ts
-import { useQuery } from '@tanstack/react-query';
-import type { ProductDTO } from '../types';
-
-export function useProducts() {
-  return useQuery<ProductDTO[]>({
-    queryKey: ['products'],
-    queryFn: async () => {
-      const response = await fetch('/api/products');
-      if (!response.ok) throw new Error('Failed to fetch products');
-      const json = await response.json();
-      return json.data;
-    },
-  });
-}
-```
-
-### Step 7: Document the Module
-
-Update `docs/progress.md` with:
-- Module name and what it does
-- Any Prisma models added
-- Any env variables required
-- Known limitations or TODOs
 
 ---
 
-## Module Checklist
+## Core Schema Extensions
 
-- [ ] `types.ts` created
-- [ ] `I<Name>Service.ts` interface created (SOLID ISP respected)
-- [ ] `<Name>Service.ts` implementation created
-- [ ] Prisma schema updated + migration created
-- [ ] API routes created (validation at route layer, business logic in service)
-- [ ] No imports from other modules
-- [ ] `docs/progress.md` updated
+Modules can add **new tables** and extend **existing core tables** (such as `User`).
+
+### 1. Direct Column Addition (Prisma / Next.js)
+The installer script (`module-installer.js`) reads `userFieldsPrisma` from `module.json` and automatically patches direct column definitions into `model User` in `prisma/schema.prisma`. It also appends `schema.prisma.snippet` to add any module-specific tables.
+
+### 2. Direct Column Addition (Flyway / Java)
+The installer copies module SQL scripts into `src/main/resources/db/migration/` with consecutive versioning (`V2__...`, `V3__...`). The SQL script executes `ALTER TABLE users ADD COLUMN...` to extend the core table cleanly before creating module tables.
+
+---
+
+## CLI Installer Integration Flow
+
+When creating a new application (`npm run create-stack`, `create-nexcore`, `create-javacore`, or `create-vitacore`):
+
+1. **Interactive Prompt**: The installer scans `modules/` and asks the developer which modules to include.
+2. **Code Injection**: Copies module stack code into `src/modules/<name>/`.
+3. **Types Linking**: Copies shared types to `packages/shared-types/src/modules/<name>/`.
+4. **Schema Patching**: Merges Prisma models or stages Flyway migration files.
+5. **Environment Configuration**: Appends missing environment variable declarations to `.env`.
+6. **Build & Migrate**: Runs database migration commands (`prisma generate`, `prisma migrate dev`, or Flyway migrations).
+
+---
+
+---
+
+## UI Component Injection Guide (`FG` Extension SDK)
+
+### The Core Philosophy
+**Never modify Core layout components (`AppHeader.tsx`, `AppShell.tsx`, `Sidebar.tsx`) to add module-specific UI.** 
+
+Instead, Core layouts expose **UI Extension Slots** via the **Forge Extension SDK (`FG`)**. Modules dynamically register their components into these slots during initialization or component render, keeping `core/` completely decoupled from business modules.
+
+---
+
+### Available UI Extension Slots
+
+| Slot Registry | Target Location | Use Cases | Example Component |
+|---|---|---|---|
+| `FG.UI.Header` | `AppHeader.tsx` (top right) | Notifications bell, tenant selectors, quick actions | `NotificationBell` |
+| `FG.UI.Sidebar` | `Sidebar.tsx` (navigation) | Dynamic menu items, module pages, external links | `ModuleNavItem` |
+
+---
+
+### 1. Header UI Slot Injection (`FG.UI.Header`)
+
+#### Registering a Component into the Header:
+```tsx
+import { FG } from '@/core/extension/FG';
+import { NotificationBell } from '@/modules/notifications/components/NotificationBell/NotificationBell';
+
+// Register UI component into Core Header
+FG.UI.Header.register({
+  id: 'notifications-bell',
+  order: 5, // Lower order renders further to the left
+  component: NotificationBell,
+});
+```
+
+#### How Core Renders Injected Header Slots (`AppHeader.tsx`):
+```tsx
+'use client';
+
+import { useHeaderSlots } from '@/core/extension/headerRegistry';
+
+export function AppHeader() {
+  const headerSlots = useHeaderSlots();
+
+  return (
+    <header className={styles.header}>
+      {/* ... Left Title Section ... */}
+
+      <div className={styles.headerRight}>
+        {/* Render dynamically registered module components */}
+        {headerSlots.map((slot) => {
+          const SlotComponent = slot.component;
+          return <SlotComponent key={slot.id} />;
+        })}
+
+        <LogoutButton />
+      </div>
+    </header>
+  );
+}
+```
+
+---
+
+### 2. Sidebar Navigation Slot Injection (`FG.UI.Sidebar`)
+
+#### Registering a Navigation Item into the Sidebar:
+```tsx
+import { FG } from '@/core/extension/FG';
+import { NavSection } from '@/core/navigation/types';
+import { Bell } from 'lucide-react';
+
+FG.UI.Sidebar.register({
+  id: 'notifications-page',
+  label: 'Notifications',
+  icon: <Bell size={18} aria-hidden="true" />,
+  href: '/notifications',
+  badge: '3',
+  order: 20,
+  section: NavSection.MAIN,
+});
+```
+
+---
+
+### Mandatory Rules for AI Agents & Developers
+
+1. **Do NOT hardcode module components in `core/` files**: If adding a new feature module, register its UI via `FG.UI.<Slot>.register(...)`.
+2. **Always mark slot registries with `'use client'`**: Any extension registry importing React hooks (`useState`, `useEffect`) must include `'use client'` at the top of the file to comply with Next.js App Router rules.
+3. **Always supply unique `id` strings**: Every registered slot must use a unique string identifier (e.g. `'notifications-bell'`, `'analytics-menu'`).
+4. **Isolate Component Exports**: Never export non-component utilities alongside React UI components to preserve Fast Refresh compliance.
+
+---
+
+## Architecture Rules & Invariants
+
+1. **`core/` never imports from `modules/`**.
+2. **Modules never import from other modules**.
+3. **Services handle business logic** — route handlers/controllers handle HTTP & validation.
+4. **Module types live inside `src/modules/<name>/types.ts`** for 100% directory self-containment.
+5. **Module API endpoints must always be namespaced under `/api/modules/<module-name>`** (e.g. `/api/modules/notifications`) to prevent route collisions with core kernel routes.
+6. **UI Slot Injection**: Modules extend Core UI by registering components into extension slots (`FG.UI.Header.register`, `FG.UI.Sidebar.register`) without mutating core layout components.
