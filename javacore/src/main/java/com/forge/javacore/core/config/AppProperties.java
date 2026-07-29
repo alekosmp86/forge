@@ -3,8 +3,7 @@ package com.forge.javacore.core.config;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -13,12 +12,11 @@ import org.springframework.util.StringUtils;
  * Holds references to domain-specific configuration properties (such as SecurityProperties)
  * and validates required settings on application startup.
  */
+@Slf4j
 @Getter
 @Component
 @RequiredArgsConstructor
 public class AppProperties {
-
-    private static final Logger log = LoggerFactory.getLogger(AppProperties.class);
 
     private final SecurityProperties security;
 
@@ -31,3 +29,4 @@ public class AppProperties {
         }
     }
 }
+

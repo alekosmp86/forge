@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const readline = require('readline');
 const { execSync } = require('child_process');
 const { askQuestion, tryCreatePostgresDatabase, tryRunDatabaseMigrations } = require('./prompt-helper');
+const { promptSelectModules, installModules } = require('./module-installer');
 
 async function main() {
   const args = process.argv.slice(2);
@@ -27,6 +28,7 @@ async function main() {
   let dbUser = 'postgres';
   let dbPassword = 'postgres';
   let jwtSecret = crypto.randomBytes(32).toString('hex');
+  let selectedModules = [];
 
   if (!isNonInteractive) {
     const rl = readline.createInterface({
@@ -43,18 +45,19 @@ async function main() {
     dbUser = await askQuestion(rl, 'PostgreSQL User', dbUser);
     dbPassword = await askQuestion(rl, 'PostgreSQL Password', dbPassword);
     jwtSecret = await askQuestion(rl, 'JWT Session Secret (min 32 chars)', jwtSecret);
+
+    // Prompt for module selection
+    selectedModules = await promptSelectModules(rl);
     rl.close();
   }
 
   const backendDir = path.join(targetDir, 'backend');
   const frontendDir = path.join(targetDir, 'frontend');
 
-  // 1. Create target stack root
   if (!fs.existsSync(targetDir)) {
     fs.mkdirSync(targetDir, { recursive: true });
   }
 
-  // 2. Helper to recursively copy directories ignoring build artifacts
   function copyRecursive(src, dest) {
     const stats = fs.statSync(src);
     if (stats.isDirectory()) {
@@ -78,7 +81,6 @@ async function main() {
   const javacoreSrc = path.join(rootDir, 'javacore');
   copyRecursive(javacoreSrc, backendDir);
 
-  // Customize pom.xml
   const pomPath = path.join(backendDir, 'pom.xml');
   if (fs.existsSync(pomPath)) {
     let pomContent = fs.readFileSync(pomPath, 'utf8');
@@ -87,7 +89,6 @@ async function main() {
     fs.writeFileSync(pomPath, pomContent);
   }
 
-  // Generate Backend .env & application.yml
   const jdbcUrl = `jdbc:postgresql://${dbHost}:${dbPort}/${dbName}`;
   const backendEnv = `# Database Configuration
 DATABASE_URL="${jdbcUrl}"
@@ -156,22 +157,24 @@ server:
 `;
   fs.writeFileSync(localYmlPath, localYmlContent);
 
+  // Install selected modules into backend
+  if (selectedModules.length > 0) {
+    installModules(backendDir, 'javacore', selectedModules);
+  }
+
   // Auto-create database & run Flyway migrations
   tryCreatePostgresDatabase(dbName, dbUser, dbHost, dbPort, dbPassword);
   tryRunDatabaseMigrations(backendDir, dbName, dbUser, dbHost, dbPort, dbPassword);
-
 
   // --- B. BOOTSTRAP FRONTEND (vitacore) ---
   console.log(`\n\x1b[36m[2/2] Bootstrapping Frontend (vitacore) in ${frontendDir}...\x1b[0m`);
   const vitacoreSrc = path.join(rootDir, 'vitacore');
   copyRecursive(vitacoreSrc, frontendDir);
 
-  // Copy shared-types into frontend
   const sharedTypesSrc = path.join(rootDir, 'packages', 'shared-types');
   const sharedTypesDest = path.join(frontendDir, 'packages', 'shared-types');
   copyRecursive(sharedTypesSrc, sharedTypesDest);
 
-  // Configure package.json & tsconfig.json in frontend
   const frontendPkgPath = path.join(frontendDir, 'package.json');
   const frontendPkg = JSON.parse(fs.readFileSync(frontendPkgPath, 'utf8'));
   frontendPkg.name = `${stackName}-frontend`;
@@ -191,7 +194,6 @@ server:
     }
   }
 
-  // Generate Frontend .env & .env.local matching Backend URL
   const backendUrl = `http://localhost:${backendPort}`;
   const frontendEnv = `# Backend Target API
 VITE_BACKEND_URL="${backendUrl}"
@@ -200,7 +202,11 @@ PORT=${frontendPort}
   fs.writeFileSync(path.join(frontendDir, '.env'), frontendEnv);
   fs.writeFileSync(path.join(frontendDir, '.env.local'), frontendEnv);
 
-  // Install frontend dependencies & compile shared-types
+  // Install selected modules into frontend
+  if (selectedModules.length > 0) {
+    installModules(frontendDir, 'vitacore', selectedModules);
+  }
+
   console.log('\n📥 Installing frontend dependencies...');
   try {
     execSync('cmd /c npm install', { cwd: frontendDir, stdio: 'inherit' });
@@ -213,6 +219,9 @@ PORT=${frontendPort}
   console.log(`\n======================================================`);
   console.log(`🎉 \x1b[32mFull-Stack Bootstrap Completed Successfully!\x1b[0m`);
   console.log(`======================================================`);
+  if (selectedModules.length > 0) {
+    console.log(`   Installed Modules: \x1b[36m${selectedModules.map((m) => m.name).join(', ')}\x1b[0m`);
+  }
   console.log(`\n📂 \x1b[1mCreated Stack Directory Structure:\x1b[0m`);
   console.log(`   - Backend:  \x1b[33m${backendDir}\x1b[0m (Spring Boot 3 on port \x1b[35m${backendPort}\x1b[0m)`);
   console.log(`   - Frontend: \x1b[36m${frontendDir}\x1b[0m (Vite + React SPA on port \x1b[35m${frontendPort}\x1b[0m)`);

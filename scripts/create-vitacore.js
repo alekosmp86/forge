@@ -3,6 +3,7 @@ const path = require('path');
 const readline = require('readline');
 const { execSync } = require('child_process');
 const { askQuestion } = require('./prompt-helper');
+const { promptSelectModules, installModules } = require('./module-installer');
 
 async function main() {
   const args = process.argv.slice(2);
@@ -26,6 +27,7 @@ async function main() {
 
   let backendUrl = 'http://localhost:8080';
   let vitePort = '5173';
+  let selectedModules = [];
 
   if (!isNonInteractive) {
     const rl = readline.createInterface({
@@ -36,15 +38,16 @@ async function main() {
     console.log('📋 \x1b[35mInteractive Configuration Setup:\x1b[0m (Press Enter for defaults)\n');
     backendUrl = await askQuestion(rl, 'Backend API Target URL', backendUrl);
     vitePort = await askQuestion(rl, 'Vite Dev Server Port', vitePort);
+
+    // Prompt for module selection
+    selectedModules = await promptSelectModules(rl, 'vitacore');
     rl.close();
   }
 
-  // Ensure target directory exists
   if (!fs.existsSync(targetDir)) {
     fs.mkdirSync(targetDir, { recursive: true });
   }
 
-  // Helper to recursively copy directories ignoring build artifacts
   function copyRecursive(src, dest) {
     const stats = fs.statSync(src);
     if (stats.isDirectory()) {
@@ -107,7 +110,12 @@ PORT=${vitePort}
   fs.writeFileSync(path.join(targetDir, '.env'), envContent);
   fs.writeFileSync(path.join(targetDir, '.env.local'), envContent);
 
-  // 6. Run npm install & build steps
+  // 6. Install selected modules into target project
+  if (selectedModules.length > 0) {
+    installModules(targetDir, 'vitacore', selectedModules);
+  }
+
+  // 7. Run npm install & build steps
   console.log('\n📥 Installing dependencies in new project...');
   try {
     execSync('cmd /c npm install', { cwd: targetDir, stdio: 'inherit' });
@@ -115,6 +123,9 @@ PORT=${vitePort}
     execSync('cmd /c npx typescript tsc', { cwd: sharedTypesDest, stdio: 'inherit' });
 
     console.log('\n🎉 \x1b[32mSuccess!\x1b[0m vitacore React + Vite template bootstrapped for \x1b[36m' + appName + '\x1b[0m!');
+    if (selectedModules.length > 0) {
+      console.log(`   Installed modules: \x1b[36m${selectedModules.map((m) => m.name).join(', ')}\x1b[0m`);
+    }
     console.log(`   - Backend API URL: \x1b[34m${backendUrl}\x1b[0m`);
     console.log('\nNext steps:');
     console.log(`  cd ${targetArg}`);

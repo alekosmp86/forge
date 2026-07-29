@@ -3,6 +3,7 @@ const path = require('path');
 const crypto = require('crypto');
 const readline = require('readline');
 const { askQuestion, tryCreatePostgresDatabase, tryRunDatabaseMigrations } = require('./prompt-helper');
+const { promptSelectModules, installModules } = require('./module-installer');
 
 async function main() {
   const args = process.argv.slice(2);
@@ -24,7 +25,6 @@ async function main() {
 
   console.log(`\n🚀 Bootstrapping new \x1b[33mjavacore\x1b[0m project \x1b[36m${appName}\x1b[0m at:\n   ${targetDir}\n`);
 
-  // Default configuration values
   let dbHost = 'localhost';
   let dbPort = '5432';
   let dbName = `${appName}_db`;
@@ -32,6 +32,7 @@ async function main() {
   let dbPassword = 'postgres';
   let jwtSecret = crypto.randomBytes(32).toString('hex');
   let serverPort = '8080';
+  let selectedModules = [];
 
   if (!isNonInteractive) {
     const rl = readline.createInterface({
@@ -47,15 +48,16 @@ async function main() {
     dbPassword = await askQuestion(rl, 'Database Password', dbPassword);
     jwtSecret = await askQuestion(rl, 'JWT Session Secret (minimum 32 characters)', jwtSecret);
     serverPort = await askQuestion(rl, 'Backend Server Port', serverPort);
+
+    // Prompt for module selection
+    selectedModules = await promptSelectModules(rl, 'javacore');
     rl.close();
   }
 
-  // Ensure target directory exists
   if (!fs.existsSync(targetDir)) {
     fs.mkdirSync(targetDir, { recursive: true });
   }
 
-  // Helper to recursively copy directories ignoring build artifacts
   function copyRecursive(src, dest) {
     const stats = fs.statSync(src);
     if (stats.isDirectory()) {
@@ -161,15 +163,23 @@ server:
 `;
   fs.writeFileSync(localYmlPath, localYmlContent);
 
-  // 4. Attempt auto-creating PostgreSQL database & running Flyway migrations
+  // 4. Install selected modules into target project
+  if (selectedModules.length > 0) {
+    installModules(targetDir, 'javacore', selectedModules);
+  }
+
+  // 5. Attempt auto-creating PostgreSQL database & running Flyway migrations
   tryCreatePostgresDatabase(dbName, dbUser, dbHost, dbPort, dbPassword);
   tryRunDatabaseMigrations(targetDir, dbName, dbUser, dbHost, dbPort, dbPassword);
 
   console.log(`\n🎉 \x1b[32mSuccess!\x1b[0m javacore template bootstrapped for \x1b[36m${appName}\x1b[0m!`);
+  if (selectedModules.length > 0) {
+    console.log(`   Installed modules: \x1b[36m${selectedModules.map((m) => m.name).join(', ')}\x1b[0m`);
+  }
   console.log('\n🗄️  \x1b[33mDatabase & Environment Configured:\x1b[0m');
   console.log(`   - JDBC DB URL: \x1b[34m${jdbcUrl}\x1b[0m`);
   console.log(`   - Server Port: \x1b[35m${serverPort}\x1b[0m`);
-  console.log('   - Flyway SQL migrations: \x1b[36msrc/main/resources/db/migration/V1__init_schema.sql\x1b[0m');
+  console.log('   - Flyway SQL migrations applied from: \x1b[36msrc/main/resources/db/migration/\x1b[0m');
   console.log('\nNext steps:');
   console.log(`  cd ${targetArg}`);
   console.log('  mvn clean compile');

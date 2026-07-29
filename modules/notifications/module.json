@@ -1,0 +1,27 @@
+{
+  "id": "notifications",
+  "name": "In-App Notifications",
+  "description": "Real-time in-app alerts, notification preferences, and unread badge tracking.",
+  "version": "1.0.0",
+  "targets": ["nexcore", "javacore", "vitacore"],
+  "envVariables": {
+    "NOTIFICATIONS_MAX_PAGE_SIZE": "50"
+  },
+  "schemaExtensions": {
+    "userFieldsPrisma": [
+      "unreadNotificationCount Int @default(0)",
+      "notificationPreferencesJson String? @default(\"{}\")"
+    ],
+    "userFlywaySql": [
+      "ALTER TABLE users ADD COLUMN IF NOT EXISTS unread_notification_count INT NOT NULL DEFAULT 0;",
+      "ALTER TABLE users ADD COLUMN IF NOT EXISTS notification_preferences_json TEXT DEFAULT '{}';"
+    ]
+  },
+  "navigationItems": [
+    {
+      "label": "Notifications",
+      "href": "/notifications",
+      "icon": "Bell"
+    }
+  ]
+}
