@@ -15,19 +15,11 @@ export {
   passwordSchema,
   idSchema,
   paginationSchema,
-  loginSchema,
-  registerSchema,
   type LoginInput,
   type RegisterInput,
 } from './validation/schemas';
 
-export { userService } from './user/UserService';
-export type { IUserService } from './user/IUserService';
-export type { UserDTO, PublicUserDTO, CreateUserInput, UpdateUserInput } from './user/types';
-
-export { createSession, deleteSession, validateSession, SESSION_COOKIE_NAME } from './auth/session';
-export { signSessionToken, verifySessionToken, hashTokenId } from './auth/tokens';
-export type { ISessionPayload, AuthCredentials, AuthResult } from './auth/types';
+export { validateSession, registerSessionProvider, SESSION_COOKIE_NAME } from './auth/session';
 export type { ICurrentUser, IPublicUser, UserRole, ApiResponse, PaginatedResponse } from './types';
 export { FG } from './extension/FG';
 export { NavSection, type ModuleNavItem } from './navigation/types';

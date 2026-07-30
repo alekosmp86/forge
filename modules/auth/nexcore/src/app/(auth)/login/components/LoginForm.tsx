@@ -34,10 +34,10 @@ export function LoginForm() {
 
   function handleFieldChange(field: keyof LoginFormState) {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
-      setFormValues((previous) => ({ ...previous, [field]: event.target.value }));
+      setFormValues((previous: LoginFormState) => ({ ...previous, [field]: event.target.value }));
       // Clear field error on change
       if (errors[field]) {
-        setErrors((previous) => ({ ...previous, [field]: undefined }));
+        setErrors((previous: Partial<LoginFormState>) => ({ ...previous, [field]: undefined }));
       }
       if (globalError) setGlobalError(null);
     };
@@ -92,7 +92,7 @@ export function LoginForm() {
   }
 
   function togglePasswordVisibility() {
-    setShowPassword((previous) => !previous);
+    setShowPassword((previous: boolean) => !previous);
   }
 
   // ─── Render ────────────────────────────────────────────────────────────────────

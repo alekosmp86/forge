@@ -34,11 +34,15 @@ async function main() {
   let serverPort = '8080';
   let selectedModules = [];
 
+  let rl = null;
   if (!isNonInteractive) {
-    const rl = readline.createInterface({
+    rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
     });
+
+    // 1. Select modules first
+    selectedModules = await promptSelectModules(rl, 'javacore');
 
     console.log('📋 \x1b[35mInteractive Configuration Setup:\x1b[0m (Press Enter for defaults)\n');
     dbHost = await askQuestion(rl, 'Database Host', dbHost);
@@ -46,12 +50,7 @@ async function main() {
     dbName = await askQuestion(rl, 'Database Name', dbName);
     dbUser = await askQuestion(rl, 'Database User', dbUser);
     dbPassword = await askQuestion(rl, 'Database Password', dbPassword);
-    jwtSecret = await askQuestion(rl, 'JWT Session Secret (minimum 32 characters)', jwtSecret);
     serverPort = await askQuestion(rl, 'Backend Server Port', serverPort);
-
-    // Prompt for module selection
-    selectedModules = await promptSelectModules(rl, 'javacore');
-    rl.close();
   }
 
   if (!fs.existsSync(targetDir)) {
@@ -165,7 +164,10 @@ server:
 
   // 4. Install selected modules into target project
   if (selectedModules.length > 0) {
-    installModules(targetDir, 'javacore', selectedModules);
+    await installModules(targetDir, 'javacore', selectedModules, rl);
+  }
+  if (rl) {
+    rl.close();
   }
 
   // 5. Attempt auto-creating PostgreSQL database & running Flyway migrations

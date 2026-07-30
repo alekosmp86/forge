@@ -30,11 +30,15 @@ async function main() {
   let jwtSecret = crypto.randomBytes(32).toString('hex');
   let selectedModules = [];
 
+  let rl = null;
   if (!isNonInteractive) {
-    const rl = readline.createInterface({
+    rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
     });
+
+    // 1. Select modules first
+    selectedModules = await promptSelectModules(rl);
 
     console.log('📋 \x1b[35mFull-Stack Interactive Configuration:\x1b[0m (Press Enter for defaults)\n');
     backendPort = await askQuestion(rl, 'Backend Server Port', backendPort);
@@ -44,11 +48,6 @@ async function main() {
     dbName = await askQuestion(rl, 'PostgreSQL Database Name', dbName);
     dbUser = await askQuestion(rl, 'PostgreSQL User', dbUser);
     dbPassword = await askQuestion(rl, 'PostgreSQL Password', dbPassword);
-    jwtSecret = await askQuestion(rl, 'JWT Session Secret (min 32 chars)', jwtSecret);
-
-    // Prompt for module selection
-    selectedModules = await promptSelectModules(rl);
-    rl.close();
   }
 
   const backendDir = path.join(targetDir, 'backend');
@@ -159,7 +158,7 @@ server:
 
   // Install selected modules into backend
   if (selectedModules.length > 0) {
-    installModules(backendDir, 'javacore', selectedModules);
+    await installModules(backendDir, 'javacore', selectedModules, rl);
   }
 
   // Auto-create database & run Flyway migrations
@@ -204,7 +203,11 @@ PORT=${frontendPort}
 
   // Install selected modules into frontend
   if (selectedModules.length > 0) {
-    installModules(frontendDir, 'vitacore', selectedModules);
+    await installModules(frontendDir, 'vitacore', selectedModules, rl);
+  }
+
+  if (rl) {
+    rl.close();
   }
 
   console.log('\n📥 Installing frontend dependencies...');

@@ -16,4 +16,5 @@
 - **No barrel export for single components:** Do not create `index.ts` files inside individual single-component subdirectories (e.g. avoid `LogoutButton/index.ts` or `Input/index.ts`). Import components directly from their explicit file path (e.g. `./LogoutButton/LogoutButton`).
 - **Module catalog `tsconfig.json` requirement:** Every Next.js module catalog template under `modules/<name>/nexcore/` must contain a `tsconfig.json` extending `../../../nexcore/tsconfig.json` and including `../../../nexcore/next-env.d.ts` so IDE language servers can resolve ambient CSS Module declarations (`*.module.css`) and Next.js types without errors in the catalog workspace.
 - **Strict Type Safety (No `any`):** Do not use `any` or allow implicit `any` types in TypeScript code unless strictly necessary. Always use explicit types, interfaces, generics, or `unknown` with type guards.
+- **Topic-Based Directory Grouping:** Separate files by topic into dedicated subdirectories (e.g. `services/`, `controllers/`, `types/`, `errors/`, `components/`) within modules and feature folders for quick visual access, clean navigation, and consistent structural discipline.
 

@@ -1,4 +1,4 @@
-import type { INotificationDTO, CreateNotificationInput } from '../types';
+import type { INotificationDTO, CreateNotificationInput } from '../types/types';
 
 export interface INotificationService {
   findByUserId(userId: string): Promise<INotificationDTO[]>;

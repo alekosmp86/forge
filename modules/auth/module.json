@@ -1,0 +1,22 @@
+{
+  "id": "auth",
+  "name": "Authentication & User Management",
+  "description": "JWT session authentication, login/register flows, password hashing, and user identity management.",
+  "version": "1.0.0",
+  "targets": ["nexcore", "javacore", "vitacore"],
+  "npmDependencies": {
+    "bcryptjs": "^3.0.3",
+    "jose": "^6.2.4"
+  },
+  "npmDevDependencies": {
+    "@types/bcryptjs": "^2.4.6"
+  },
+  "envVariables": {
+    "SESSION_SECRET": {
+      "description": "JWT Session Secret (minimum 32 characters)",
+      "autoGenerate": "hex:32"
+    }
+  },
+  "schemaExtensions": {},
+  "navigationItems": []
+}

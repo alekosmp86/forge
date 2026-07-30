@@ -42,6 +42,7 @@ This workspace contains the **Forge** — a set of reusable template repositorie
 - **Plan before implementing.** Always create a detailed implementation plan and get user approval before making code changes.
 - **Make UI components mobile-first.** Always design and write CSS layouts prioritizing mobile viewports first (e.g. mobile drawer/overlay for sidebars), scaling up with responsive breakpoints. Every UI component, layout, and navigation element must be 100% functional on mobile viewports.
 - **Strict Type Safety (No `any`).** Do not use `any` or allow implicit `any` types in TypeScript code unless strictly necessary. Always use explicit types, interfaces, generics, or `unknown` with type guards.
+- **Topic-Based Directory Grouping.** Separate files by topic into dedicated subdirectories (e.g. `services/`, `controllers/`, `types/`, `errors/`, `components/`) within modules and feature folders for quick visual access, clean navigation, and consistent structural discipline.
 
 ---
 

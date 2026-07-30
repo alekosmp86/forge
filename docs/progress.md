@@ -1,5 +1,38 @@
 # Forge — Progress Log
 
+## Session: 2026-07-30
+
+### What Was Built
+
+**Core Authentication Extraction to Optional `modules/auth` (COMPLETE)**
+
+- [x] `modules/auth/module.json` — Built manifest for optional Authentication & User Management module (`id: "auth"`, targets: `nexcore`, `javacore`, `vitacore`).
+- [x] `modules/auth/nexcore/schema.prisma.snippet` — Extracted `User` and `RefreshToken` models out of kernel schema into auth module snippet for dynamic project patching.
+- [x] `nexcore/prisma/schema.prisma` — Uncoupled kernel core schema from hardcoded `User` and `RefreshToken` models, allowing zero-auth public website bootstrapping without DB setup.
+- [x] `nexcore/src/core/auth/session.ts` & `nexcore/src/core/index.ts` — Refactored core auth into a pluggable Kernel SessionProvider slot (`registerSessionProvider`, `validateSession`) defaulting to guest/null context when no auth module is installed.
+- [x] `modules/auth/nexcore/` — Built self-contained Next.js auth module directory:
+  - `tsconfig.json` extending kernel tsconfig with Next.js type declarations.
+  - `types.ts`, `errors.ts`, `tokens.ts`, `session.ts`, `IAuthService.ts`, `AuthService.ts`, `init.ts`.
+  - Namespaced API route handlers under `/api/modules/auth/` (`login`, `register`, `logout`, `me`).
+  - Moved login & register pages (`src/app/(auth)/`) into module workspace.
+- [x] `nexcore/src/proxy.ts` — Updated route guard proxy to allow public pass-through when auth module is omitted.
+
+---
+
+## Session: 2026-07-30 (Part 2)
+
+### What Was Built
+
+**CLI Module Selection, Dependency Resolution & Modular Package Injection (COMPLETE)**
+
+- [x] `modules/*/nexcore/tsconfig.json` — Fixed TypeScript type resolution by replacing catch-all wildcard `"*"` paths with explicit module aliases (`next`, `zod`, `bcryptjs`, `jose`, `lucide-react`), enabling standard Node `@types/react` resolution and eliminating `implicit any` errors.
+- [x] `scripts/module-installer.js` — Built keypress terminal checkbox selector UI (`[✔]` / `[ ]`) with `↑`/`↓` arrow navigation, `Space` toggle, `1-9` key toggles, `A` (Select All), `N` (Deselect All), and `Enter` confirmation.
+- [x] Dependency Resolution & Deduplication — Implemented `resolveModuleDependencies()` map registry in `scripts/module-installer.js` so prerequisite module dependencies (e.g. `auth` for `notifications`) are automatically included and installed **exactly once** in correct order.
+- [x] Prisma Schema Bidirectional Relations — Added `"notifications Notification[]"` to `userFieldsPrisma` in `modules/notifications/module.json` to guarantee valid 1:N relations and clean `npx prisma generate` execution.
+- [x] Modular Package Injection & Lightweight Base Templates — Trimmed `bcryptjs`, `jose`, `@types/bcryptjs`, and `@tanstack/react-query` out of `nexcore/package.json` and `vitacore/package.json` base templates. Built `patchPackageJsonDependencies()` in `scripts/module-installer.js` to inject module dependencies into `package.json` dynamically when modules are selected, ensuring zero-module projects remain minimal and lightweight.
+
+---
+
 ## Session: 2026-07-29
 
 ### What Was Built

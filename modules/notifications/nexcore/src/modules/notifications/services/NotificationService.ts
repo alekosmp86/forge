@@ -8,7 +8,7 @@ import type {
   NotificationType,
   NotificationRecord,
   ExtendedPrisma,
-} from '../types';
+} from '../types/types';
 
 const db = prisma as unknown as ExtendedPrisma;
 

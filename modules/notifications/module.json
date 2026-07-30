@@ -4,13 +4,18 @@
   "description": "Real-time in-app alerts, notification preferences, and unread badge tracking.",
   "version": "1.0.0",
   "targets": ["nexcore", "javacore", "vitacore"],
+  "dependencies": ["auth"],
+  "npmDependencies": {
+    "@tanstack/react-query": "^5.101.4"
+  },
   "envVariables": {
     "NOTIFICATIONS_MAX_PAGE_SIZE": "50"
   },
   "schemaExtensions": {
     "userFieldsPrisma": [
       "unreadNotificationCount Int @default(0)",
-      "notificationPreferencesJson String? @default(\"{}\")"
+      "notificationPreferencesJson String? @default(\"{}\")",
+      "notifications Notification[]"
     ],
     "userFlywaySql": [
       "ALTER TABLE users ADD COLUMN IF NOT EXISTS unread_notification_count INT NOT NULL DEFAULT 0;",
