@@ -1,7 +1,16 @@
 {
   "extends": "../../../nexcore/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*",
+        "../../../nexcore/src/*"
+      ],
+      "@forge/shared-types": [
+        "../../../packages/shared-types/src/index.ts"
+      ]
+    }
   },
   "include": [
     "../../../nexcore/next-env.d.ts",

@@ -18,10 +18,10 @@ export function NotificationBell() {
     { id: '2', title: 'System Security', message: 'JWT session cookie generated.', isRead: true },
   ]);
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const unreadCount = notifications.filter((n: NotificationItem) => !n.isRead).length;
 
   const markAllRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    setNotifications((prev: NotificationItem[]) => prev.map((n: NotificationItem) => ({ ...n, isRead: true })));
   };
 
   return (
@@ -29,7 +29,7 @@ export function NotificationBell() {
       <button
         type="button"
         className={styles.bellButton}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => setIsOpen((prev: boolean) => !prev)}
         aria-label="Open notifications"
       >
         <Bell size={18} aria-hidden="true" />
@@ -55,11 +55,11 @@ export function NotificationBell() {
             {notifications.length === 0 ? (
               <div className={styles.emptyState}>No notifications yet</div>
             ) : (
-              notifications.map((item) => (
+              notifications.map((item: NotificationItem) => (
                 <div
                   key={item.id}
                   className={`${styles.item} ${!item.isRead ? styles.unreadItem : ''}`}
-                  onClick={() => setNotifications((prev) => prev.map((n) => (n.id === item.id ? { ...n, isRead: true } : n)))}
+                  onClick={() => setNotifications((prev: NotificationItem[]) => prev.map((n: NotificationItem) => (n.id === item.id ? { ...n, isRead: true } : n)))}
                 >
                   <div className={styles.itemTitle}>{item.title}</div>
                   <div className={styles.itemMessage}>{item.message}</div>

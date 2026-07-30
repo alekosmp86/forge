@@ -2,17 +2,25 @@ import 'server-only';
 import { prisma } from '@/core/db/client';
 import { AppError } from '@/core/errors/AppError';
 import type { INotificationService } from './INotificationService';
-import type { INotificationDTO, CreateNotificationInput, NotificationType } from './types';
+import type {
+  INotificationDTO,
+  CreateNotificationInput,
+  NotificationType,
+  NotificationRecord,
+  ExtendedPrisma,
+} from '../types';
+
+const db = prisma as unknown as ExtendedPrisma;
 
 export const notificationService: INotificationService = {
   async findByUserId(userId: string): Promise<INotificationDTO[]> {
-    const records = await prisma.notification.findMany({
+    const records = await db.notification.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
       take: 50,
     });
 
-    return records.map((record) => ({
+    return records.map((record: NotificationRecord) => ({
       id: record.id,
       userId: record.userId,
       title: record.title,
@@ -24,7 +32,7 @@ export const notificationService: INotificationService = {
   },
 
   async create(input: CreateNotificationInput): Promise<INotificationDTO> {
-    const record = await prisma.notification.create({
+    const record = await db.notification.create({
       data: {
         userId: input.userId,
         title: input.title,
@@ -33,7 +41,7 @@ export const notificationService: INotificationService = {
       },
     });
 
-    await prisma.user.update({
+    await db.user.update({
       where: { id: input.userId },
       data: { unreadNotificationCount: { increment: 1 } },
     });
@@ -50,24 +58,24 @@ export const notificationService: INotificationService = {
   },
 
   async markAsRead(notificationId: string, userId: string): Promise<INotificationDTO> {
-    const existing = await prisma.notification.findFirst({
+    const existing = await db.notification.findFirst({
       where: { id: notificationId, userId },
     });
 
     if (!existing) {
-      throw AppError.notFound('Notification not found');
+      throw new AppError('Notification not found', 404);
     }
 
-    const updated = await prisma.notification.update({
+    const updated = await db.notification.update({
       where: { id: notificationId },
       data: { isRead: true },
     });
 
-    const unreadCount = await prisma.notification.count({
+    const unreadCount = await db.notification.count({
       where: { userId, isRead: false },
     });
 
-    await prisma.user.update({
+    await db.user.update({
       where: { id: userId },
       data: { unreadNotificationCount: unreadCount },
     });
@@ -84,7 +92,7 @@ export const notificationService: INotificationService = {
   },
 
   async getUnreadCount(userId: string): Promise<number> {
-    return prisma.notification.count({
+    return db.notification.count({
       where: { userId, isRead: false },
     });
   },

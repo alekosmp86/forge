@@ -41,6 +41,7 @@ This workspace contains the **Forge** — a set of reusable template repositorie
 - **Run react-doctor.** Ensure `react-doctor` is included in npm scripts/packages and run after implementing major changes to audit security, performance, and Fast Refresh compliance.
 - **Plan before implementing.** Always create a detailed implementation plan and get user approval before making code changes.
 - **Make UI components mobile-first.** Always design and write CSS layouts prioritizing mobile viewports first (e.g. mobile drawer/overlay for sidebars), scaling up with responsive breakpoints. Every UI component, layout, and navigation element must be 100% functional on mobile viewports.
+- **Strict Type Safety (No `any`).** Do not use `any` or allow implicit `any` types in TypeScript code unless strictly necessary. Always use explicit types, interfaces, generics, or `unknown` with type guards.
 
 ---
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { validateSession } from '@/core/auth/session';
-import { notificationService } from '@/modules/notifications/NotificationService';
+import { notificationService } from '@/modules/notifications/services/NotificationService';
 
 const createSchema = z.object({
   title: z.string().min(1),
